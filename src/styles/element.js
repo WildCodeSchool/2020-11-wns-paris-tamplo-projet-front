@@ -9,9 +9,3 @@ export const Nav = styled.nav`
   align-items: center;
   margin: auto;
 `
-
-export const ButtonNav = styled.button`
-  a {
-    text-decoration: none;
-  }
-`
