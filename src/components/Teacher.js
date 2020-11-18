@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 import {
   Table,
@@ -10,32 +11,31 @@ import {
 } from '@material-ui/core'
 import { averageValueOfArray } from '../utils/average'
 
-const Teacher = () => {
+const Teacher = (props) => {
   const [moods, setMoods] = useState(null)
   const [students, setStudents] = useState(null)
   const [dates, setDates] = useState(null)
+  let history = useHistory()
 
-  const getMoods = async () => {
+  const getData = async () => {
+    const { mdp } = props.match.params
     try {
-      const result = await axios('http://localhost:8080/moods')
-      setMoods(result.data)
-      setDates([...new Set(result.data.map((el) => el.date))].sort())
+      const resultMood = await axios('http://localhost:8080/moods', {
+        params: { mdp }
+      })
+      setMoods(resultMood.data)
+      setDates([...new Set(resultMood.data.map((el) => el.date))].sort())
+
+      const resultStudents = await axios('http://localhost:8080/students')
+      setStudents(resultStudents.data)
     } catch (error) {
-      console.log(error)
+      history.push('/')
     }
   }
 
-  const getStudents = async () => {
-    try {
-      const result = await axios('http://localhost:8080/students')
-      setStudents(result.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => getMoods(), [])
-  useEffect(() => getStudents(), [])
+  useEffect(() => {
+    getData()
+  }, [])
 
   if (moods === null || students === null || dates === null) {
     return <p>Loading...</p>

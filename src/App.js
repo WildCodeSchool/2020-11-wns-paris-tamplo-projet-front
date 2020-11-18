@@ -32,7 +32,7 @@ const App = () => {
           </Nav>
         </Route>
         <Route path="/student" component={Student} />
-        <Route path="/teacher" component={Teacher} />
+        <Route path="/teacher/:mdp" component={Teacher} />
       </Switch>
     </div>
   )
