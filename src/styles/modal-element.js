@@ -55,5 +55,10 @@ export const Button = styled.button`
 `
 export const Div = styled.div`
   display: flex;
-  flex-flow: column wrap;
+  flex-direction: column;
+  align-items: center;
+`
+
+export const Input = styled.input`
+  margin: 0;
 `
