@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core'
+import {
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody
+} from '@material-ui/core'
+import { averageValueOfArray } from '../utils/average'
 
 const Teacher = () => {
   const [moods, setMoods] = useState(null)
@@ -36,7 +43,7 @@ const Teacher = () => {
 
   return (
     <div className="teacher-container">
-      <h2>Mood tracker</h2>
+      <h2>Suivi d'humeur</h2>
       <Table>
         <TableHead>
           <TableRow>
@@ -44,10 +51,11 @@ const Teacher = () => {
             {dates.map((date) => (
               <TableCell>{date}</TableCell>
             ))}
+            <TableCell>Moy/élève</TableCell>
           </TableRow>
         </TableHead>
-        {students.map((student) => (
-          <TableBody>
+        <TableBody>
+          {students.map((student) => (
             <TableRow>
               <TableCell>{student.firstname}</TableCell>
               {dates.map((date) => (
@@ -60,9 +68,21 @@ const Teacher = () => {
                   }
                 </TableCell>
               ))}
+              <TableCell>
+                {averageValueOfArray(moods, student.id, 'student_id', 'note')}
+              </TableCell>
             </TableRow>
-          </TableBody>
-        ))}
+          ))}
+          <TableRow>
+            <TableCell>Moy/jour</TableCell>
+            {dates.map((date) => (
+              <TableCell>
+                {averageValueOfArray(moods, date, 'date', 'note')}
+              </TableCell>
+            ))}
+            <TableCell>&nbsp;</TableCell>
+          </TableRow>
+        </TableBody>
       </Table>
     </div>
   )
