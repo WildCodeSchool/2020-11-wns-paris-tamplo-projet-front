@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core'
+
 const Teacher = () => {
   const [moods, setMoods] = useState(null)
   const [students, setStudents] = useState(null)
@@ -35,29 +37,33 @@ const Teacher = () => {
   return (
     <div className="teacher-container">
       <h2>Mood tracker</h2>
-      <table>
-        <tr>
-          <td>&nbsp;</td>
-          {dates.map((date) => (
-            <td key={date}>{date}</td>
-          ))}
-        </tr>
-        {students.map((student) => (
-          <tr>
-            <td>{student.firstname}</td>
-            {dates.map((date, i) => (
-              <td key={i}>
-                {
-                  (moods.find(
-                    (mood) =>
-                      mood.student_id === student.id && mood.date === date
-                  ) || {})['note']
-                }
-              </td>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>&nbsp;</TableCell>
+            {dates.map((date) => (
+              <TableCell>{date}</TableCell>
             ))}
-          </tr>
+          </TableRow>
+        </TableHead>
+        {students.map((student) => (
+          <TableBody>
+            <TableRow>
+              <TableCell>{student.firstname}</TableCell>
+              {dates.map((date) => (
+                <TableCell>
+                  {
+                    (moods.find(
+                      (mood) =>
+                        mood.student_id === student.id && mood.date === date
+                    ) || {})['note']
+                  }
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableBody>
         ))}
-      </table>
+      </Table>
     </div>
   )
 }
