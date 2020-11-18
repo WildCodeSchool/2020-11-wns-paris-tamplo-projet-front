@@ -3,12 +3,9 @@ import axios from 'axios'
 
 import MoodModal from './MoodModal'
 
-import {
-  NativeSelect,
-  Button
-} from '@material-ui/core'
+import { NativeSelect, Button } from '@material-ui/core'
 
-import {StudentContainer, StudentForm} from '../styles/element'
+import { StudentContainer, StudentForm } from '../styles/element'
 
 const Student = () => {
   const [students, setStudents] = useState(null)
@@ -34,6 +31,11 @@ const Student = () => {
     )
     setSelectStudent({ ...students[indexStudent] })
   }
+
+  const closeModal = () => {
+    setOpenModal(false)
+  }
+
   return (
     <StudentContainer>
       <StudentForm>
@@ -44,7 +46,7 @@ const Student = () => {
         >
           <option value="">--Choisis un nom--</option>
           {students.map((student) => (
-            <option value={student.id}>
+            <option value={student.id} key={student.id}>
               {student.firstname} {student.lastname}
             </option>
           ))}
@@ -56,10 +58,14 @@ const Student = () => {
         >
           Ok
         </Button>
-        </StudentForm>
-        {openModal && (
-          <MoodModal name={selectStudent.firstname} id={selectStudent.id} />
-        )}
+      </StudentForm>
+      {openModal && (
+        <MoodModal
+          name={selectStudent.firstname}
+          id={selectStudent.id}
+          closemodal={closeModal}
+        />
+      )}
     </StudentContainer>
   )
 }

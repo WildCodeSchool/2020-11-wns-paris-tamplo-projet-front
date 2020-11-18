@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import {
   Title,
@@ -18,13 +17,8 @@ import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentV
 import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVerySatisfiedOutlined'
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 
-const MoodModal = ({ id, name }) => {
+const MoodModal = ({ id, name, closemodal }) => {
   const [note, setNote] = useState()
-  const [redirect, setRedirect] = useState(null)
-
-  if (redirect) {
-    return <Redirect to={redirect} />
-  }
 
   return (
     <Modal>
@@ -34,13 +28,10 @@ const MoodModal = ({ id, name }) => {
         onSubmit={async (e) => {
           e.preventDefault()
           try {
-            const result = await axios.post('http://localhost:8080/moods', {
+            await axios.post('http://localhost:8080/moods', {
               student_id: id,
               note: note
             })
-            if (result.data.success) {
-              setRedirect('/student')
-            }
           } catch (error) {
             console.error(error)
           }
@@ -104,7 +95,7 @@ const MoodModal = ({ id, name }) => {
           </Div>
         </Container>
         {note && <SimpleText>Tu as selectionné l'humeur {note} !</SimpleText>}
-        <Button type="submit">
+        <Button type="submit" onClick={closemodal}>
           Ajouter mon humeur <i className="far fa-paper-plane"></i>
         </Button>
       </Form>
