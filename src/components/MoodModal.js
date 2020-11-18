@@ -11,6 +11,8 @@ import {
   Div
 } from '../styles/modal-element'
 
+import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
+
 const MoodModal = () => {
   const [mood, setMood] = useState()
   const [redirect, setRedirect] = useState(null)
@@ -37,7 +39,7 @@ const MoodModal = () => {
         <Container>
           <Div>
             <Label>
-              <i className="far fa-tired"></i>
+              <SentimentVeryDissatisfiedOutlinedIcon />
             </Label>
             <input
               type="radio"
@@ -47,9 +49,7 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label>
-              <i className="far fa-sad-tear"></i>
-            </Label>
+            <Label></Label>
             <input
               type="radio"
               value="2"
@@ -58,9 +58,7 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label>
-              <i className="far fa-meh-blank"></i>
-            </Label>
+            <Label></Label>
             <input
               type="radio"
               value="3"
@@ -69,9 +67,7 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label>
-              <i className="far fa-smile"></i>
-            </Label>
+            <Label></Label>
             <input
               type="radio"
               value="4"
@@ -80,9 +76,7 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label>
-              <i className="far fa-laugh-beam"></i>
-            </Label>
+            <Label></Label>
             <input
               type="radio"
               value="5"

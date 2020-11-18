@@ -1,11 +1,12 @@
 import React from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
-import MoodModal from './components/MoodModal'
 
+import MoodModal from './components/MoodModal'
 import Student from './components/Student'
 import Teacher from './components/Teacher'
 
-import { Nav, ButtonNav } from './styles/element'
+import { Nav } from './styles/element'
+import { Button } from '@material-ui/core'
 
 const App = () => {
   return (
@@ -13,12 +14,22 @@ const App = () => {
       <Switch>
         <Route exact path="/">
           <Nav>
-            <ButtonNav>
-              <Link to="/student">Student</Link>
-            </ButtonNav>
-            <ButtonNav>
-              <Link to="/teacher">Teacher</Link>
-            </ButtonNav>
+            <Button
+              variant="outlined"
+              color="secondary"
+              component={Link}
+              to="/student"
+            >
+              Student
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              component={Link}
+              to="/teacher"
+            >
+              Teacher
+            </Button>
           </Nav>
         </Route>
         <Route path="/student" component={Student} />
