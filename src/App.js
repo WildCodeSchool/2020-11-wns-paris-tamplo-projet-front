@@ -1,7 +1,6 @@
 import React from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 
-import MoodModal from './components/MoodModal'
 import Student from './components/Student'
 import Teacher from './components/Teacher'
 
@@ -35,7 +34,6 @@ const App = () => {
         <Route path="/student" component={Student} />
         <Route path="/teacher" component={Teacher} />
       </Switch>
-      <MoodModal />
     </div>
   )
 }
