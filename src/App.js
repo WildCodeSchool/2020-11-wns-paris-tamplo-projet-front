@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 
+import MoodModal from './components/MoodModal'
 import Student from './components/Student'
 import Teacher from './components/Teacher'
 
@@ -9,31 +10,32 @@ import { Button } from '@material-ui/core'
 
 const App = () => {
   return (
-    <div className='app-container'>
+    <div className="app-container">
       <Switch>
-        <Route exact path='/'>
+        <Route exact path="/">
           <Nav>
             <Button
-              variant='outlined'
-              color='secondary'
+              variant="outlined"
+              color="secondary"
               component={Link}
-              to='/student'
+              to="/student"
             >
               Student
             </Button>
             <Button
-              variant='outlined'
-              color='primary'
+              variant="outlined"
+              color="primary"
               component={Link}
-              to='/teacher'
+              to="/teacher"
             >
               Teacher
             </Button>
           </Nav>
         </Route>
-        <Route path='/student' component={Student} />
-        <Route path='/teacher' component={Teacher} />
+        <Route path="/student" component={Student} />
+        <Route path="/teacher" component={Teacher} />
       </Switch>
+      <MoodModal />
     </div>
   )
 }
