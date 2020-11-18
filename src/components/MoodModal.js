@@ -27,11 +27,13 @@ const MoodModal = ({ id, name, closemodal }) => {
       <Form
         onSubmit={async (e) => {
           e.preventDefault()
+          console.log(id, note)
           try {
-            await axios.post('http://localhost:8080/moods', {
+            const result = await axios.post('http://localhost:8080/moods', {
               student_id: id,
               note: note
             })
+            closemodal()
           } catch (error) {
             console.error(error)
           }
@@ -95,7 +97,7 @@ const MoodModal = ({ id, name, closemodal }) => {
           </Div>
         </Container>
         {note && <SimpleText>Tu as selectionné l'humeur {note} !</SimpleText>}
-        <Button type="submit" onClick={closemodal}>
+        <Button type="submit">
           Ajouter mon humeur <i className="far fa-paper-plane"></i>
         </Button>
       </Form>
