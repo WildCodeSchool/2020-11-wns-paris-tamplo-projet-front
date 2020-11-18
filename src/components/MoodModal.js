@@ -11,11 +11,11 @@ import {
   Div
 } from '../styles/modal-element'
 
-import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
-import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
-import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
+import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
+import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
 import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVerySatisfiedOutlined'
+import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 
 const MoodModal = () => {
   const [mood, setMood] = useState()
