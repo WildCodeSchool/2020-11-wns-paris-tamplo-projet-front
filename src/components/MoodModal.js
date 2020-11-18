@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import {
   Title,
@@ -34,9 +33,6 @@ const MoodModal = ({ id, name, closemodal }) => {
               student_id: id,
               note: note
             })
-            if (result.data.success) {
-              console.log(result)
-            }
             closemodal()
           } catch (error) {
             console.error(error)
