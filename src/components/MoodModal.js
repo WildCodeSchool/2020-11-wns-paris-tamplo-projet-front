@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import axios from 'axios'
 import {
   Title,
   Modal,
@@ -11,35 +11,32 @@ import {
   Div
 } from '../styles/modal-element'
 
-import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
-import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
-import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
+import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
+import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
 import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVerySatisfiedOutlined'
+import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 
-const MoodModal = () => {
-  const [mood, setMood] = useState()
-  const [redirect, setRedirect] = useState(null)
-
-  const handleSubmit = (e) => {
-    try {
-      e.preventDefault()
-      console.log(mood)
-      setRedirect('/')
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  if (redirect) {
-    return <Redirect to={redirect} />
-  }
+const MoodModal = ({ id, name, closemodal }) => {
+  const [note, setNote] = useState()
 
   return (
     <Modal>
-      <Title>Bonjour Arthur,</Title>
+      <Title>Bonjour {name},</Title>
       <SimpleText>Quel est ton état d'esprit aujourd'hui ?</SimpleText>
-      <Form onSubmit={handleSubmit}>
+      <Form
+        onSubmit={async (e) => {
+          e.preventDefault()
+          try {
+            await axios.post('http://localhost:8080/moods', {
+              student_id: id,
+              note: note
+            })
+          } catch (error) {
+            console.error(error)
+          }
+        }}
+      >
         <Container>
           <Div>
             <Label>
@@ -48,8 +45,8 @@ const MoodModal = () => {
             <input
               type="radio"
               value="1"
-              checked={mood === 1}
-              onChange={(e) => setMood(parseInt(e.target.value))}
+              checked={note === 1}
+              onChange={(e) => setNote(parseInt(e.target.value))}
             />
           </Div>
           <Div>
@@ -59,8 +56,8 @@ const MoodModal = () => {
             <input
               type="radio"
               value="2"
-              checked={mood === 2}
-              onChange={(e) => setMood(parseInt(e.target.value))}
+              checked={note === 2}
+              onChange={(e) => setNote(parseInt(e.target.value))}
             />
           </Div>
           <Div>
@@ -70,8 +67,8 @@ const MoodModal = () => {
             <input
               type="radio"
               value="3"
-              checked={mood === 3}
-              onChange={(e) => setMood(parseInt(e.target.value))}
+              checked={note === 3}
+              onChange={(e) => setNote(parseInt(e.target.value))}
             />
           </Div>
           <Div>
@@ -81,8 +78,8 @@ const MoodModal = () => {
             <input
               type="radio"
               value="4"
-              checked={mood === 4}
-              onChange={(e) => setMood(parseInt(e.target.value))}
+              checked={note === 4}
+              onChange={(e) => setNote(parseInt(e.target.value))}
             />
           </Div>
           <Div>
@@ -92,13 +89,13 @@ const MoodModal = () => {
             <input
               type="radio"
               value="5"
-              checked={mood === 5}
-              onChange={(e) => setMood(parseInt(e.target.value))}
+              checked={note === 5}
+              onChange={(e) => setNote(parseInt(e.target.value))}
             />
           </Div>
         </Container>
-        {mood && <SimpleText>Tu as selectionné l'humeur {mood} !</SimpleText>}
-        <Button type="submit">
+        {note && <SimpleText>Tu as selectionné l'humeur {note} !</SimpleText>}
+        <Button type="submit" onClick={closemodal}>
           Ajouter mon humeur <i className="far fa-paper-plane"></i>
         </Button>
       </Form>
