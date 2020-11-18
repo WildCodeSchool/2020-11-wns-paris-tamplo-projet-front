@@ -12,6 +12,10 @@ import {
 } from '../styles/modal-element'
 
 import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
+import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
+import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
+import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
+import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVerySatisfiedOutlined'
 
 const MoodModal = () => {
   const [mood, setMood] = useState()
@@ -39,7 +43,7 @@ const MoodModal = () => {
         <Container>
           <Div>
             <Label>
-              <SentimentVeryDissatisfiedOutlinedIcon />
+              <SentimentVeryDissatisfiedOutlinedIcon fontSize="large" />
             </Label>
             <input
               type="radio"
@@ -49,7 +53,9 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label></Label>
+            <Label>
+              <MoodBadOutlinedIcon fontSize="large" />
+            </Label>
             <input
               type="radio"
               value="2"
@@ -58,7 +64,9 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label></Label>
+            <Label>
+              <SentimentSatisfiedIcon fontSize="large" />
+            </Label>
             <input
               type="radio"
               value="3"
@@ -67,7 +75,9 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label></Label>
+            <Label>
+              <MoodOutlinedIcon fontSize="large" />
+            </Label>
             <input
               type="radio"
               value="4"
@@ -76,7 +86,9 @@ const MoodModal = () => {
             />
           </Div>
           <Div>
-            <Label></Label>
+            <Label>
+              <SentimentVerySatisfiedOutlinedIcon fontSize="large" />
+            </Label>
             <input
               type="radio"
               value="5"
