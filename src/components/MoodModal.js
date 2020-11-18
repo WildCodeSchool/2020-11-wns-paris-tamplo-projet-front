@@ -8,7 +8,8 @@ import {
   Container,
   Form,
   Button,
-  Div
+  Div,
+  Input
 } from '../styles/modal-element'
 
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
@@ -44,7 +45,7 @@ const MoodModal = ({ id, name, closemodal }) => {
             <Label>
               <SentimentVeryDissatisfiedOutlinedIcon fontSize="large" />
             </Label>
-            <input
+            <Input
               type="radio"
               value="1"
               checked={note === 1}
@@ -55,7 +56,7 @@ const MoodModal = ({ id, name, closemodal }) => {
             <Label>
               <MoodBadOutlinedIcon fontSize="large" />
             </Label>
-            <input
+            <Input
               type="radio"
               value="2"
               checked={note === 2}
@@ -66,7 +67,7 @@ const MoodModal = ({ id, name, closemodal }) => {
             <Label>
               <SentimentSatisfiedIcon fontSize="large" />
             </Label>
-            <input
+            <Input
               type="radio"
               value="3"
               checked={note === 3}
@@ -77,7 +78,7 @@ const MoodModal = ({ id, name, closemodal }) => {
             <Label>
               <MoodOutlinedIcon fontSize="large" />
             </Label>
-            <input
+            <Input
               type="radio"
               value="4"
               checked={note === 4}
@@ -88,7 +89,7 @@ const MoodModal = ({ id, name, closemodal }) => {
             <Label>
               <SentimentVerySatisfiedOutlinedIcon fontSize="large" />
             </Label>
-            <input
+            <Input
               type="radio"
               value="5"
               checked={note === 5}
