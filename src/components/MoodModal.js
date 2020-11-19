@@ -30,7 +30,7 @@ const MoodModal = ({ id, name, closemodal }) => {
           e.preventDefault()
           console.log(id, note)
           try {
-            const result = await axios.post('http://localhost:8080/moods', {
+            await axios.post('/moods', {
               student_id: id,
               note: note
             })
