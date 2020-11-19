@@ -20,13 +20,13 @@ const Teacher = (props) => {
   const getData = async () => {
     const { mdp } = props.match.params
     try {
-      const resultMood = await axios('http://localhost:8080/moods', {
+      const resultMood = await axios('/moods', {
         params: { mdp }
       })
       setMoods(resultMood.data)
       setDates([...new Set(resultMood.data.map((el) => el.date))].sort())
 
-      const resultStudents = await axios('http://localhost:8080/students')
+      const resultStudents = await axios('/students')
       setStudents(resultStudents.data)
     } catch (error) {
       history.push('/')
@@ -35,6 +35,7 @@ const Teacher = (props) => {
 
   useEffect(() => {
     getData()
+    // eslint-disable-next-line
   }, [])
 
   if (moods === null || students === null || dates === null) {

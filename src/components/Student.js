@@ -13,7 +13,7 @@ const Student = () => {
   const [selectStudent, setSelectStudent] = useState({})
 
   const getStudents = async () => {
-    const result = await axios.get('http://localhost:8080/students')
+    const result = await axios.get('/students')
     setStudents(result.data)
   }
 
