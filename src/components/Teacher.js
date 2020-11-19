@@ -29,7 +29,7 @@ const Teacher = (props) => {
       const resultStudents = await axios('http://localhost:8080/students')
       setStudents(resultStudents.data)
     } catch (error) {
-      history.push('/')
+      history.push('/teacher')
     }
   }
 

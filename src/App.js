@@ -33,6 +33,9 @@ const App = () => {
         </Route>
         <Route path="/student" component={Student} />
         <Route path="/teacher/:mdp" component={Teacher} />
+        <Route path="/teacher"> 
+          <p>Entrez l'url secrète</p>
+        </Route>
       </Switch>
     </div>
   )
