@@ -21,7 +21,7 @@ const Student = () => {
     getStudents()
   }, [])
   if (students === null) {
-    // TODO #15 Add animation log @SebG-prog
+    // DONE
     return <p>Loading...</p>
   }
 
