@@ -20,7 +20,7 @@ const Student = () => {
   useEffect(() => {
     getStudents()
   }, [])
-
+  // TODO #17 Fait nous une belle animation @Audreyritzenthaler
   if (students === null) {
     return <p>Loading...</p>
   }
