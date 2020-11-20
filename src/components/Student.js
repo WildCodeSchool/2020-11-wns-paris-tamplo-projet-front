@@ -20,8 +20,8 @@ const Student = () => {
   useEffect(() => {
     getStudents()
   }, [])
-  // TODO #14  add an animated loader @SebG-prog
   if (students === null) {
+    // TODO #15 Add animation log @SebG-prog
     return <p>Loading...</p>
   }
 
