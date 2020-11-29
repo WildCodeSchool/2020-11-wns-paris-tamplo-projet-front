@@ -1,13 +1,13 @@
 import React from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 
+import { Button } from '@material-ui/core'
 import Student from './components/Student'
 import Teacher from './components/Teacher'
 
 import { Nav } from './styles/element'
-import { Button } from '@material-ui/core'
 
-const App = () => {
+const App = (): JSX.Element => {
   return (
     <div className="app-container">
       <Switch>
@@ -33,7 +33,7 @@ const App = () => {
         </Route>
         <Route path="/student" component={Student} />
         <Route path="/teacher/:mdp" component={Teacher} />
-        <Route path="/teacher"> 
+        <Route path="/teacher">
           <p>Entrez l'url secrète</p>
         </Route>
       </Switch>
