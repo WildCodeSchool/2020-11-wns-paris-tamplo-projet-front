@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useHistory, RouteComponentProps } from 'react-router-dom'
 
 import {
   Table,
@@ -9,22 +9,27 @@ import {
   TableCell,
   TableBody
 } from '@material-ui/core'
-import { averageValueOfArray } from '../utils/average'
+import averageValueOfArray from '../utils/average'
+import { IMood, IStudent } from '../types/data'
 
-const Teacher = (props) => {
-  const [moods, setMoods] = useState(null)
-  const [students, setStudents] = useState(null)
-  const [dates, setDates] = useState(null)
-  let history = useHistory()
+interface IRouteInfo {
+  mdp: string
+}
+
+const Teacher = ({ match }: RouteComponentProps<IRouteInfo>): JSX.Element => {
+  const [moods, setMoods] = useState<IMood[]>([])
+  const [students, setStudents] = useState<IStudent[]>([])
+  const [dates, setDates] = useState<any[]>([])
+  const history = useHistory()
 
   const getData = async () => {
-    const { mdp } = props.match.params
+    const { mdp } = match.params
     try {
       const resultMood = await axios('/moods', {
         params: { mdp }
       })
       setMoods(resultMood.data)
-      setDates([...new Set(resultMood.data.map((el) => el.date))].sort())
+      setDates([...new Set(resultMood.data.map((el: IMood) => el.date))].sort())
 
       const resultStudents = await axios('/students')
       setStudents(resultStudents.data)
@@ -62,10 +67,12 @@ const Teacher = (props) => {
               {dates.map((date) => (
                 <TableCell>
                   {
-                    (moods.find(
-                      (mood) =>
-                        mood.student_id === student.id && mood.date === date
-                    ) || {})['note']
+                    (
+                      moods.find(
+                        (mood) =>
+                          mood.student_id === student.id && mood.date === date
+                      ) || {}
+                    ).note
                   }
                 </TableCell>
               ))}

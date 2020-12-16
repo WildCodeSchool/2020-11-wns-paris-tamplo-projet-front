@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+
+import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
+import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
+import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
+import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVerySatisfiedOutlined'
+import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 import {
   Title,
   Modal,
@@ -12,30 +18,30 @@ import {
   Input
 } from '../styles/modal-element'
 
-import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
-import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
-import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
-import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVerySatisfiedOutlined'
-import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
+interface IProps {
+  id: number
+  name: string
+  closemodal: () => void
+}
 
-const MoodModal = ({ id, name, closemodal }) => {
-  const [note, setNote] = useState()
+const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
+  const [note, setNote] = useState<number>()
 
   return (
     <Modal>
       <Title>Bonjour {name},</Title>
       <SimpleText>Quel est ton état d'esprit aujourd'hui ?</SimpleText>
       <Form
-        onSubmit={async (e) => {
+        onSubmit={async (e: React.FormEvent) => {
           e.preventDefault()
-          console.log(id, note)
           try {
             await axios.post('/moods', {
               student_id: id,
-              note: note
+              note
             })
             closemodal()
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.error(error)
           }
         }}
@@ -49,7 +55,9 @@ const MoodModal = ({ id, name, closemodal }) => {
               type="radio"
               value="1"
               checked={note === 1}
-              onChange={(e) => setNote(parseInt(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNote(parseInt(e.target.value, 10))
+              }
             />
           </Div>
           <Div>
@@ -60,7 +68,9 @@ const MoodModal = ({ id, name, closemodal }) => {
               type="radio"
               value="2"
               checked={note === 2}
-              onChange={(e) => setNote(parseInt(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNote(parseInt(e.target.value, 10))
+              }
             />
           </Div>
           <Div>
@@ -71,7 +81,9 @@ const MoodModal = ({ id, name, closemodal }) => {
               type="radio"
               value="3"
               checked={note === 3}
-              onChange={(e) => setNote(parseInt(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNote(parseInt(e.target.value, 10))
+              }
             />
           </Div>
           <Div>
@@ -82,7 +94,9 @@ const MoodModal = ({ id, name, closemodal }) => {
               type="radio"
               value="4"
               checked={note === 4}
-              onChange={(e) => setNote(parseInt(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNote(parseInt(e.target.value, 10))
+              }
             />
           </Div>
           <Div>
@@ -93,13 +107,15 @@ const MoodModal = ({ id, name, closemodal }) => {
               type="radio"
               value="5"
               checked={note === 5}
-              onChange={(e) => setNote(parseInt(e.target.value))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setNote(parseInt(e.target.value, 10))
+              }
             />
           </Div>
         </Container>
         {note && <SimpleText>Tu as selectionné l'humeur {note} !</SimpleText>}
         <Button type="submit">
-          Ajouter mon humeur <i className="far fa-paper-plane"></i>
+          Ajouter mon humeur <i className="far fa-paper-plane" />
         </Button>
       </Form>
     </Modal>

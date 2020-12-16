@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import MoodModal from './MoodModal'
-
 import { NativeSelect, Button } from '@material-ui/core'
+import MoodModal from './MoodModal'
 
 import { StudentContainer, StudentForm } from '../styles/element'
 
-const Student = () => {
-  const [students, setStudents] = useState(null)
-  const [openModal, setOpenModal] = useState(false)
-  const [selectStudent, setSelectStudent] = useState({})
+import { IStudent } from '../types/data'
+
+const Student = (): JSX.Element => {
+  const [students, setStudents] = useState<IStudent[]>([])
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [selectStudent, setSelectStudent] = useState<IStudent>()
 
   const getStudents = async () => {
     const result = await axios.get('/students')
@@ -25,9 +26,9 @@ const Student = () => {
     return <p>Loading...</p>
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const indexStudent = students.findIndex(
-      (student) => student.id === parseInt(e.target.value)
+      (student) => student.id === parseInt(e.target.value, 10)
     )
     setSelectStudent({ ...students[indexStudent] })
   }
@@ -59,7 +60,7 @@ const Student = () => {
           Ok
         </Button>
       </StudentForm>
-      {openModal && (
+      {openModal && selectStudent && (
         <MoodModal
           name={selectStudent.firstname}
           id={selectStudent.id}
