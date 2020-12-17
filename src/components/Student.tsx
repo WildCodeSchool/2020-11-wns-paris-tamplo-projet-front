@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
+import { useQuery, gql } from '@apollo/client'
 
 import { NativeSelect, Button } from '@material-ui/core'
 import MoodModal from './MoodModal'
@@ -8,27 +8,37 @@ import { StudentContainer, StudentForm } from '../styles/element'
 
 import { IStudent } from '../types/data'
 
+const ALL_STUDENTS = gql`
+  query allStudents {
+    allStudents {
+      id
+      firstname
+      lastname
+    }
+  }
+`
+
 const Student = (): JSX.Element => {
-  const [students, setStudents] = useState<IStudent[]>([])
+  const {
+    loading: loadingStudents,
+    error: errorStudents,
+    data: dataStudents
+  } = useQuery(ALL_STUDENTS)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [selectStudent, setSelectStudent] = useState<IStudent>()
 
-  const getStudents = async () => {
-    const result = await axios.get('/students')
-    setStudents(result.data)
-  }
-
-  useEffect(() => {
-    getStudents()
-  }, [])
-
-  if (students === null) {
+  if (loadingStudents === null) {
     return <p>Loading...</p>
   }
+  if (errorStudents === null) {
+    return <p>Error...</p>
+  }
+
+  const students = dataStudents && dataStudents.allStudents
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const indexStudent = students.findIndex(
-      (student) => student.id === parseInt(e.target.value, 10)
+      (student: IStudent) => student.id === parseInt(e.target.value, 10)
     )
     setSelectStudent({ ...students[indexStudent] })
   }
@@ -46,7 +56,7 @@ const Student = (): JSX.Element => {
           onChange={handleChange}
         >
           <option value="">--Choisis un nom--</option>
-          {students.map((student) => (
+          {students.map((student: IStudent) => (
             <option value={student.id} key={student.id}>
               {student.firstname} {student.lastname}
             </option>

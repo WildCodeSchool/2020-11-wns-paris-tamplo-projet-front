@@ -1,19 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
 import './index.css'
-import axios from 'axios'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-axios.defaults.baseURL =
-  process.env.REACT_APP_SERVER_URL || 'http://localhost:8080'
+const client = new ApolloClient({
+  uri: 'http://localhost:8080',
+  cache: new InMemoryCache()
+})
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
