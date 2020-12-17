@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useMutation, gql } from '@apollo/client'
 
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
 import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
@@ -19,13 +20,46 @@ import {
 } from '../styles/modal-element'
 
 interface IProps {
-  id: number
+  id: string
   name: string
   closemodal: () => void
 }
 
+const ADD_MOOD = gql`
+  mutation updateMoodStudent($id: String, $mood: inputMood) {
+    updateMoodStudent(id: $id, mood: $mood) {
+      id
+      firstname
+      lastname
+      moods {
+        note
+        comment
+        created_at
+      }
+    }
+  }
+`
+
 const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
+  const [addMood] = useMutation(ADD_MOOD)
   const [note, setNote] = useState<number>()
+  const [comment, setComment] = useState<string>()
+
+  const handleAddMood = async () => {
+    try {
+      const response = await addMood({
+        variables: {
+          id,
+          mood: {
+            note,
+            comment
+          }
+        }
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   return (
     <Modal>
@@ -35,10 +69,7 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
         onSubmit={async (e: React.FormEvent) => {
           e.preventDefault()
           try {
-            await axios.post('/moods', {
-              student_id: id,
-              note
-            })
+            handleAddMood()
             closemodal()
           } catch (error) {
             // eslint-disable-next-line no-console

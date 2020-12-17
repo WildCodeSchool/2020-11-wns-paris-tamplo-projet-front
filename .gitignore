@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-.vscode
 .eslintcache
 # testing
 /coverage
@@ -19,6 +18,8 @@
 .env.test.local
 .env.production.local
 .eslintcache
+.vscode/
+
 react-app-env.d.ts
 
 npm-debug.log*
