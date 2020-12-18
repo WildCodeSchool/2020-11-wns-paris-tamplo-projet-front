@@ -22,16 +22,6 @@ const generateListOfRatingFromDate = (
     [] as number[]
   )
 
-// const generateListOfRatingFromId = (
-//   studentList: IMoodMock[],
-//   valueToFilter: string
-// ) =>
-//   studentList.reduce(
-//     (list, student) =>
-//       student.date === valueToFilter ? [...list, student.note] : list,
-//     [] as number[]
-//   )
-
 const getMoodAverageFromDate = (
   studentList: IMoodMock[],
   valueToFilter: string

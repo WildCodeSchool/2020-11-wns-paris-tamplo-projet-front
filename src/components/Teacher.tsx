@@ -8,7 +8,9 @@ import {
   TableBody
 } from '@material-ui/core'
 
-import { IMood, IStudent } from '../types/data'
+import { IStudent } from '../types/data'
+import getStudentAverageMood from '../utils/getStudentAverageMood'
+import getDateAverageMood from '../utils/getDateAverageMood'
 
 interface ITeacherProps {
   students: IStudent[]
@@ -16,15 +18,11 @@ interface ITeacherProps {
 }
 
 const getNote = (student: IStudent, date: string): number => {
-  const indexMood = student.moods.findIndex(
-    (mood) => mood.created_at === date[0]
-  )
-  console.log(indexMood)
+  const indexMood = student.moods.findIndex((mood) => mood.created_at === date)
   return student.moods[indexMood]?.note
 }
 
 const Teacher = ({ students, dates }: ITeacherProps): JSX.Element => {
-  console.log(students)
   return (
     <div className="teacher-container">
       <h2>Suivi d'humeur</h2>
@@ -45,20 +43,16 @@ const Teacher = ({ students, dates }: ITeacherProps): JSX.Element => {
               {dates.map((date) => (
                 <TableCell>{getNote(student, date)}</TableCell>
               ))}
-              {/* <TableCell>
-                {averageValueOfArray(moods, student.id, 'student_id', 'note')}
-              </TableCell> */}
+              <TableCell>{getStudentAverageMood(student)}</TableCell>
             </TableRow>
           ))}
-          {/* <TableRow>
+          <TableRow>
             <TableCell>Moy/jour</TableCell>
             {dates.map((date) => (
-              <TableCell>
-                {averageValueOfArray(moods, date, 'date', 'note')}
-              </TableCell>
+              <TableCell>{getDateAverageMood(students, date)}</TableCell>
             ))}
             <TableCell>&nbsp;</TableCell>
-          </TableRow> */}
+          </TableRow>
         </TableBody>
       </Table>
     </div>

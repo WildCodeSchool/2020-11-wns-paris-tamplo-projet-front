@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useQuery, useMutation, gql } from '@apollo/client'
+import { useQuery, gql } from '@apollo/client'
 
 import Student from './Student'
 
@@ -21,20 +21,6 @@ const StudentContainer = (): JSX.Element => {
     error: errorStudents,
     data: dataStudents
   } = useQuery(ALL_STUDENTS)
-  // const [createStudent] = useMutation(CREATE_STUDENT)
-
-  // const handleCreateStudent = async () => {
-  //   try {
-  //     const response = await createStudent({
-  //       variables: {
-  //         firstname,
-  //         lastname
-  //       }
-  //     })
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-  // }
 
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [selectStudent, setSelectStudent] = useState<IStudent>()

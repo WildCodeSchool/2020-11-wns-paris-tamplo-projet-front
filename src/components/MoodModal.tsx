@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { useMutation, gql } from '@apollo/client'
 
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
@@ -72,7 +71,6 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
             handleAddMood()
             closemodal()
           } catch (error) {
-            // eslint-disable-next-line no-console
             console.error(error)
           }
         }}

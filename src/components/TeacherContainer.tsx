@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, gql } from '@apollo/client'
-import { useHistory, RouteComponentProps } from 'react-router-dom'
 
 import Teacher from './Teacher'
 
-import { IMood, IStudent } from '../types/data'
-import averageValueOfArray from '../utils/average'
+import getUniqueDateFromStudents from '../utils/getUniqueDateFromStudents'
 
 const ALL_STUDENTS = gql`
   query students {
@@ -23,48 +21,19 @@ const ALL_STUDENTS = gql`
 `
 
 const TeacherContainer = (): JSX.Element => {
-  // const [moods, setMoods] = useState<IMood[]>([])
   const {
     loading: loadingStudents,
     error: errorStudents,
     data: dataStudents
   } = useQuery(ALL_STUDENTS)
-  const [dates, setDates] = useState<any[]>([])
-  // const history = useHistory()
-
-  // const getData = async () => {
-  //   // const { mdp } = match.params
-  //   try {
-  //     // const resultMood = await axios('/moods', {
-  //     //   params: { mdp }
-  //     // })
-  //     setMoods(resultMood.data)
-
-  //     const resultStudents = await axios('/students')
-  //     setStudents(resultStudents.data)
-  //   } catch (error) {
-  //     history.push('/teacher')
-  //   }
-  // }
+  const [dates, setDates] = useState<string[]>([])
 
   useEffect(() => {
     if (dataStudents) {
-      setDates(
-        [
-          ...new Set(
-            dataStudents.students.map((student: IStudent) =>
-              student.moods.map((mood: IMood) => mood.created_at)
-            )
-          )
-        ].sort()
-      )
+      setDates(getUniqueDateFromStudents(dataStudents.students))
     }
     // eslint-disable-next-line
   }, [dataStudents])
-
-  // if (moods === null || students === null || dates === null) {
-  //   return <p>Loading...</p>
-  // }
 
   if (loadingStudents) {
     return <p>Loading...</p>

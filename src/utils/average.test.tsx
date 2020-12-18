@@ -1,6 +1,6 @@
 import getMoodAverage from './average'
 
-const data = [
+const students = [
   {
     id: 1,
     firstname: 'Jane',
@@ -43,7 +43,7 @@ const data = [
   }
 ]
 
-const data2 = [
+const student = [
   {
     id: 1,
     firstname: 'Jane',
@@ -56,43 +56,23 @@ const data2 = [
 
 describe('getMoodAverage', () => {
   describe('when no user is provided', () => {
-    // describe('student_id case', () => {
-    //   it('returns 0', () => {
-    //     expect(getMoodAverage([], 2)).toEqual(0)
-    //   })
-    // })
-    describe('date case', () => {
-      it('returns 0', () => {
-        expect(getMoodAverage([], '17th Nov 2020')).toEqual(0)
-      })
+    it('returns 0', () => {
+      expect(getMoodAverage([], '17th Nov 2020')).toEqual(0)
     })
   })
   describe('when only one user is provided', () => {
-    // it('returns the student note', () => {
-    //   expect(getMoodAverage(data2, 2)).toEqual(3)
-    // })
     it('returns the student note for that day', () => {
-      expect(getMoodAverage(data2, '17th Nov 2020')).toEqual(3)
+      expect(getMoodAverage(student, '17th Nov 2020')).toEqual(3)
     })
   })
-  describe('when user provided not match valueToFilter', () => {
-    describe('as a student_id', () => {
-      // it('returns 0', () => {
-      //   expect(getMoodAverage(data2, 5)).toEqual(0)
-      // })
-    })
-    describe('as a date', () => {
-      it('returns 0', () => {
-        expect(getMoodAverage(data2, '19th Nov 2020')).toEqual(0)
-      })
+  describe('when user provided not match date', () => {
+    it('returns 0', () => {
+      expect(getMoodAverage(student, '19th Nov 2020')).toEqual(0)
     })
   })
   describe('when multiple users are provided', () => {
-    // it('returns the student average notes', () => {
-    //   expect(getMoodAverage(data, 2)).toEqual(3.5)
-    // })
     it('returns the students average note for that day', () => {
-      expect(getMoodAverage(data, '16th Nov 2020')).toEqual(4.5)
+      expect(getMoodAverage(students, '16th Nov 2020')).toEqual(4.5)
     })
   })
 })
