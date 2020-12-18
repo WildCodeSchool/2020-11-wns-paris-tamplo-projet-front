@@ -1,14 +1,12 @@
 export interface IMood {
-  id: number
-  firstname: string
-  lastname: string
   note: number
-  date: Date
-  student_id: number
+  comment: string
+  created_at: string
 }
 
 export interface IStudent {
-  id: number
+  id: string
   firstname: string
   lastname: string
+  moods: IMood[]
 }

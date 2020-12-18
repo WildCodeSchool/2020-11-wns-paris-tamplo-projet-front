@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useQuery, gql } from '@apollo/client'
+import React from 'react'
 
 import { NativeSelect, Button } from '@material-ui/core'
 import MoodModal from './MoodModal'
@@ -8,45 +7,22 @@ import { StudentContainer, StudentForm } from '../styles/element'
 
 import { IStudent } from '../types/data'
 
-const ALL_STUDENTS = gql`
-  query allStudents {
-    allStudents {
-      id
-      firstname
-      lastname
-    }
-  }
-`
-
-const Student = (): JSX.Element => {
-  const {
-    loading: loadingStudents,
-    error: errorStudents,
-    data: dataStudents
-  } = useQuery(ALL_STUDENTS)
-  const [openModal, setOpenModal] = useState<boolean>(false)
-  const [selectStudent, setSelectStudent] = useState<IStudent>()
-
-  if (loadingStudents === null) {
-    return <p>Loading...</p>
-  }
-  if (errorStudents === null) {
-    return <p>Error...</p>
-  }
-
-  const students = dataStudents && dataStudents.allStudents
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const indexStudent = students.findIndex(
-      (student: IStudent) => student.id === parseInt(e.target.value, 10)
-    )
-    setSelectStudent({ ...students[indexStudent] })
-  }
-
-  const closeModal = () => {
-    setOpenModal(false)
-  }
-
+interface IStudentProps {
+  handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  students: { id: string; firstname: string; lastname: string }[]
+  setOpenModal: (arg: boolean) => void
+  openModal: boolean
+  closeModal: () => void
+  selectStudent: IStudent | undefined
+}
+const Student = ({
+  handleChange,
+  students,
+  setOpenModal,
+  openModal,
+  closeModal,
+  selectStudent
+}: IStudentProps): JSX.Element => {
   return (
     <StudentContainer>
       <StudentForm>
@@ -56,7 +32,7 @@ const Student = (): JSX.Element => {
           onChange={handleChange}
         >
           <option value="">--Choisis un nom--</option>
-          {students.map((student: IStudent) => (
+          {students.map((student) => (
             <option value={student.id} key={student.id}>
               {student.firstname} {student.lastname}
             </option>

@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { useHistory, RouteComponentProps } from 'react-router-dom'
+import React from 'react'
 
 import {
   Table,
@@ -9,44 +7,22 @@ import {
   TableCell,
   TableBody
 } from '@material-ui/core'
-import averageValueOfArray from '../utils/average'
-import { IMood, IStudent } from '../types/data'
 
-interface IRouteInfo {
-  mdp: string
+import { IStudent } from '../types/data'
+import getStudentAverageMood from '../utils/getStudentAverageMood'
+import getDateAverageMood from '../utils/getDateAverageMood'
+
+interface ITeacherProps {
+  students: IStudent[]
+  dates: string[]
 }
 
-const Teacher = ({ match }: RouteComponentProps<IRouteInfo>): JSX.Element => {
-  const [moods, setMoods] = useState<IMood[]>([])
-  const [students, setStudents] = useState<IStudent[]>([])
-  const [dates, setDates] = useState<any[]>([])
-  const history = useHistory()
+const getNote = (student: IStudent, date: string): number => {
+  const indexMood = student.moods.findIndex((mood) => mood.created_at === date)
+  return student.moods[indexMood]?.note
+}
 
-  const getData = async () => {
-    const { mdp } = match.params
-    try {
-      const resultMood = await axios('/moods', {
-        params: { mdp }
-      })
-      setMoods(resultMood.data)
-      setDates([...new Set(resultMood.data.map((el: IMood) => el.date))].sort())
-
-      const resultStudents = await axios('/students')
-      setStudents(resultStudents.data)
-    } catch (error) {
-      history.push('/teacher')
-    }
-  }
-
-  useEffect(() => {
-    getData()
-    // eslint-disable-next-line
-  }, [])
-
-  if (moods === null || students === null || dates === null) {
-    return <p>Loading...</p>
-  }
-
+const Teacher = ({ students, dates }: ITeacherProps): JSX.Element => {
   return (
     <div className="teacher-container">
       <h2>Suivi d'humeur</h2>
@@ -65,28 +41,15 @@ const Teacher = ({ match }: RouteComponentProps<IRouteInfo>): JSX.Element => {
             <TableRow>
               <TableCell>{student.firstname}</TableCell>
               {dates.map((date) => (
-                <TableCell>
-                  {
-                    (
-                      moods.find(
-                        (mood) =>
-                          mood.student_id === student.id && mood.date === date
-                      ) || {}
-                    ).note
-                  }
-                </TableCell>
+                <TableCell>{getNote(student, date)}</TableCell>
               ))}
-              <TableCell>
-                {averageValueOfArray(moods, student.id, 'student_id', 'note')}
-              </TableCell>
+              <TableCell>{getStudentAverageMood(student)}</TableCell>
             </TableRow>
           ))}
           <TableRow>
             <TableCell>Moy/jour</TableCell>
             {dates.map((date) => (
-              <TableCell>
-                {averageValueOfArray(moods, date, 'date', 'note')}
-              </TableCell>
+              <TableCell>{getDateAverageMood(students, date)}</TableCell>
             ))}
             <TableCell>&nbsp;</TableCell>
           </TableRow>
