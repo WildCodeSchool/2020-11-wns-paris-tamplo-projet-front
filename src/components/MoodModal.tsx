@@ -6,17 +6,9 @@ import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
 import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
 import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVerySatisfiedOutlined'
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
-import {
-  Title,
-  Modal,
-  SimpleText,
-  Label,
-  Container,
-  Form,
-  Button,
-  Div,
-  Input
-} from '../styles/modal-element'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/core/styles'
 
 interface IProps {
   id: string
@@ -39,10 +31,63 @@ const ADD_MOOD = gql`
   }
 `
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    width: 250,
+    margin: '2em auto',
+    color: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main
+  },
+  modal: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    width: '50%',
+    margin: 'auto',
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: '20px',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)'
+  },
+  name: {
+    color: theme.palette.primary.main
+  },
+  titleModal: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignSelf: 'flex-start',
+    padding: '1.5em'
+  },
+  text: {
+    color: theme.palette.primary.dark,
+    padding: '0.4em 0'
+  },
+  moodList: {
+    display: 'flex',
+    flexFlow: 'row nowrap'
+  },
+  eachMood: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  formMood: {
+    display: 'flex',
+    flexFlow: 'column wrap',
+    justifyContent: 'center'
+  },
+  labelMood: {
+    padding: '0.5em 1em'
+  }
+}))
+
 const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
   const [addMood] = useMutation(ADD_MOOD)
   const [note, setNote] = useState<number>()
   const [comment, setComment] = useState<string>()
+  const classes = useStyles()
 
   const handleAddMood = async () => {
     try {
@@ -61,10 +106,18 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
   }
 
   return (
-    <Modal>
-      <Title>Bonjour {name},</Title>
-      <SimpleText>Quel est ton état d'esprit aujourd'hui ?</SimpleText>
-      <Form
+    <div className={classes.modal}>
+      <div className={classes.titleModal}>
+        <Typography variant="h4" className={classes.text}>
+          Bonjour
+          <span className={classes.name}> {name}</span>,
+        </Typography>
+      </div>
+      <Typography variant="body1" className={classes.text}>
+        Quel est ton état d'esprit aujourd'hui ?
+      </Typography>
+      <form
+        className={classes.formMood}
         onSubmit={async (e: React.FormEvent) => {
           e.preventDefault()
           try {
@@ -75,12 +128,16 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
           }
         }}
       >
-        <Container>
-          <Div>
-            <Label>
-              <SentimentVeryDissatisfiedOutlinedIcon fontSize="large" />
-            </Label>
-            <Input
+        <div className={classes.moodList}>
+          <div className={classes.eachMood}>
+            <label htmlFor="first" className={classes.labelMood}>
+              <SentimentVeryDissatisfiedOutlinedIcon
+                fontSize="large"
+                className={classes.text}
+              />
+            </label>
+            <input
+              id="first"
               type="radio"
               value="1"
               checked={note === 1}
@@ -88,12 +145,13 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </Div>
-          <Div>
-            <Label>
-              <MoodBadOutlinedIcon fontSize="large" />
-            </Label>
-            <Input
+          </div>
+          <div className={classes.eachMood}>
+            <label htmlFor="second" className={classes.labelMood}>
+              <MoodBadOutlinedIcon fontSize="large" className={classes.text} />
+            </label>
+            <input
+              id="second"
               type="radio"
               value="2"
               checked={note === 2}
@@ -101,12 +159,16 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </Div>
-          <Div>
-            <Label>
-              <SentimentSatisfiedIcon fontSize="large" />
-            </Label>
-            <Input
+          </div>
+          <div className={classes.eachMood}>
+            <label htmlFor="third" className={classes.labelMood}>
+              <SentimentSatisfiedIcon
+                fontSize="large"
+                className={classes.text}
+              />
+            </label>
+            <input
+              id="third"
               type="radio"
               value="3"
               checked={note === 3}
@@ -114,12 +176,13 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </Div>
-          <Div>
-            <Label>
-              <MoodOutlinedIcon fontSize="large" />
-            </Label>
-            <Input
+          </div>
+          <div className={classes.eachMood}>
+            <label htmlFor="fourth" className={classes.labelMood}>
+              <MoodOutlinedIcon fontSize="large" className={classes.text} />
+            </label>
+            <input
+              id="fourth"
               type="radio"
               value="4"
               checked={note === 4}
@@ -127,12 +190,16 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </Div>
-          <Div>
-            <Label>
-              <SentimentVerySatisfiedOutlinedIcon fontSize="large" />
-            </Label>
-            <Input
+          </div>
+          <div className={classes.eachMood}>
+            <label htmlFor="fifth" className={classes.labelMood}>
+              <SentimentVerySatisfiedOutlinedIcon
+                fontSize="large"
+                className={classes.text}
+              />
+            </label>
+            <input
+              id="fifth"
               type="radio"
               value="5"
               checked={note === 5}
@@ -140,14 +207,18 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </Div>
-        </Container>
-        {note && <SimpleText>Tu as selectionné l'humeur {note} !</SimpleText>}
-        <Button type="submit">
-          Ajouter mon humeur <i className="far fa-paper-plane" />
+          </div>
+        </div>
+        {note && (
+          <Typography variant="body2">
+            Tu as selectionné l'humeur {note} !
+          </Typography>
+        )}
+        <Button variant="contained" className={classes.button}>
+          Envoyer mon humeur
         </Button>
-      </Form>
-    </Modal>
+      </form>
+    </div>
   )
 }
 
