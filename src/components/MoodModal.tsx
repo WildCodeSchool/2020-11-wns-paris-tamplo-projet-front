@@ -68,17 +68,19 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexFlow: 'row nowrap'
   },
-  eachMood: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
+  // eachMood: {
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   alignItems: 'center'
+  // },
   formMood: {
     display: 'flex',
     flexFlow: 'column wrap',
     justifyContent: 'center'
   },
   labelMood: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
     padding: '0.5em 1em'
   }
 }))
@@ -129,13 +131,11 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
         }}
       >
         <div className={classes.moodList}>
-          <div className={classes.eachMood}>
-            <label htmlFor="first" className={classes.labelMood}>
-              <SentimentVeryDissatisfiedOutlinedIcon
-                fontSize="large"
-                className={classes.text}
-              />
-            </label>
+          <label htmlFor="first" className={classes.labelMood}>
+            <SentimentVeryDissatisfiedOutlinedIcon
+              fontSize="large"
+              className={classes.text}
+            />
             <input
               id="first"
               type="radio"
@@ -145,11 +145,10 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </div>
-          <div className={classes.eachMood}>
-            <label htmlFor="second" className={classes.labelMood}>
-              <MoodBadOutlinedIcon fontSize="large" className={classes.text} />
-            </label>
+          </label>
+
+          <label htmlFor="second" className={classes.labelMood}>
+            <MoodBadOutlinedIcon fontSize="large" className={classes.text} />
             <input
               id="second"
               type="radio"
@@ -159,14 +158,10 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </div>
-          <div className={classes.eachMood}>
-            <label htmlFor="third" className={classes.labelMood}>
-              <SentimentSatisfiedIcon
-                fontSize="large"
-                className={classes.text}
-              />
-            </label>
+          </label>
+
+          <label htmlFor="third" className={classes.labelMood}>
+            <SentimentSatisfiedIcon fontSize="large" className={classes.text} />
             <input
               id="third"
               type="radio"
@@ -176,11 +171,10 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </div>
-          <div className={classes.eachMood}>
-            <label htmlFor="fourth" className={classes.labelMood}>
-              <MoodOutlinedIcon fontSize="large" className={classes.text} />
-            </label>
+          </label>
+
+          <label htmlFor="fourth" className={classes.labelMood}>
+            <MoodOutlinedIcon fontSize="large" className={classes.text} />
             <input
               id="fourth"
               type="radio"
@@ -190,14 +184,13 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </div>
-          <div className={classes.eachMood}>
-            <label htmlFor="fifth" className={classes.labelMood}>
-              <SentimentVerySatisfiedOutlinedIcon
-                fontSize="large"
-                className={classes.text}
-              />
-            </label>
+          </label>
+
+          <label htmlFor="fifth" className={classes.labelMood}>
+            <SentimentVerySatisfiedOutlinedIcon
+              fontSize="large"
+              className={classes.text}
+            />
             <input
               id="fifth"
               type="radio"
@@ -207,8 +200,9 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
                 setNote(parseInt(e.target.value, 10))
               }
             />
-          </div>
+          </label>
         </div>
+
         {note && (
           <Typography variant="body2">
             Tu as selectionné l'humeur {note} !
