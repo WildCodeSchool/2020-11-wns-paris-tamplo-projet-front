@@ -88,7 +88,7 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
 
   const handleAddMood = async () => {
     try {
-      const response = await addMood({
+      await addMood({
         variables: {
           id,
           mood: {
@@ -203,7 +203,7 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
             Tu as selectionné l'humeur {note} !
           </Typography>
         )}
-        <Button variant="contained" className={classes.button}>
+        <Button variant="contained" className={classes.button} type="submit">
           Envoyer mon humeur
         </Button>
       </form>
