@@ -68,11 +68,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexFlow: 'row nowrap'
   },
-  // eachMood: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   alignItems: 'center'
-  // },
   formMood: {
     display: 'flex',
     flexFlow: 'column wrap',
