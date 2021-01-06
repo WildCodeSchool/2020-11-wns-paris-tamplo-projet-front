@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/app/src
+    container_name: client-tamplo
