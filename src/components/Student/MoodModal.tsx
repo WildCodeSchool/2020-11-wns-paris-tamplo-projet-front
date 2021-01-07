@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useMutation, gql } from '@apollo/client'
+import React, { Dispatch, SetStateAction } from 'react'
 
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
 import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
@@ -8,100 +7,38 @@ import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVery
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/core/styles'
 
-interface IProps {
-  id: string
+interface IMoodModalProps {
+  classes: Record<
+    | 'button'
+    | 'text'
+    | 'modal'
+    | 'name'
+    | 'titleModal'
+    | 'moodList'
+    | 'formMood'
+    | 'labelMood',
+    string
+  >
+  handleAddMood: () => void
+  closeModal: () => void
+  comment: string | undefined
+  setComment: Dispatch<SetStateAction<string | undefined>>
+  note: number | undefined
+  setNote: Dispatch<SetStateAction<number | undefined>>
   name: string
-  closemodal: () => void
 }
 
-const ADD_MOOD = gql`
-  mutation updateMoodStudent($id: String, $mood: inputMood) {
-    updateMoodStudent(id: $id, mood: $mood) {
-      id
-      firstname
-      lastname
-      moods {
-        note
-        comment
-        created_at
-      }
-    }
-  }
-`
-
-const useStyles = makeStyles((theme) => ({
-  button: {
-    width: 250,
-    margin: '2em auto',
-    color: theme.palette.secondary.main,
-    backgroundColor: theme.palette.primary.main
-  },
-  modal: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    width: '50%',
-    margin: 'auto',
-    backgroundColor: theme.palette.secondary.main,
-    borderRadius: '20px',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)'
-  },
-  name: {
-    color: theme.palette.primary.main
-  },
-  titleModal: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    alignSelf: 'flex-start',
-    padding: '1.5em'
-  },
-  text: {
-    color: theme.palette.primary.dark,
-    padding: '0.4em 0'
-  },
-  moodList: {
-    display: 'flex',
-    flexFlow: 'row nowrap'
-  },
-  formMood: {
-    display: 'flex',
-    flexFlow: 'column wrap',
-    justifyContent: 'center'
-  },
-  labelMood: {
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    padding: '0.5em 1em'
-  }
-}))
-
-const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
-  const [addMood] = useMutation(ADD_MOOD)
-  const [note, setNote] = useState<number>()
-  const [comment, setComment] = useState<string>()
-  const classes = useStyles()
-
-  const handleAddMood = async () => {
-    try {
-      await addMood({
-        variables: {
-          id,
-          mood: {
-            note,
-            comment
-          }
-        }
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
+const MoodModal = ({
+  handleAddMood,
+  classes,
+  closeModal,
+  comment,
+  setComment,
+  note,
+  setNote,
+  name
+}: IMoodModalProps): JSX.Element => {
   return (
     <div className={classes.modal}>
       <div className={classes.titleModal}>
@@ -119,7 +56,7 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
           e.preventDefault()
           try {
             handleAddMood()
-            closemodal()
+            closeModal()
           } catch (error) {
             console.error(error)
           }
@@ -200,7 +137,15 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
 
         {note && (
           <Typography variant="body2">
-            Tu as selectionné l'humeur {note} !
+            <label htmlFor="commentMood">
+              Tu as un commentaire à faire ?
+              <input
+                id="commentMood"
+                type="text"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </label>
           </Typography>
         )}
         <Button variant="contained" className={classes.button} type="submit">
