@@ -27,11 +27,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test:watch": "react-scripts test",
-    "test": "react-scripts test --watchAll=false",
-    "test:CI": "npm run format && npm run test && npm run lint",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier src/**/*.ts{,x}",
+    "format": "prettier --write src/**/*.ts{,x}",
     "lint": "tsc --noEmit && eslint src/**/*.ts{,x}"
   },
   "eslintConfig": {
