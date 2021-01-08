@@ -11,6 +11,9 @@ const ALL_STUDENTS = gql`
       id
       firstname
       lastname
+      moods {
+        created_at
+      }
     }
   }
 `
@@ -24,6 +27,23 @@ const StudentContainer = (): JSX.Element => {
 
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [selectStudent, setSelectStudent] = useState<IStudent>()
+
+  const firstConnectionModal = () => {
+    const dateConnection = Date.now()
+    const today = new Date(dateConnection)
+    console.log('date', today.toLocaleDateString(), typeof today)
+    if (selectStudent) {
+      const lastMoodOfStudent = selectStudent?.moods[0].created_at
+      const lastMoodDateFormat = new Date(1608217961) // <= fonctionne, il faut que l'unix timestamp fasse 10 characteres.
+      // C'est une string et pas un objet, c'est pour ça que tu galere
+      console.log('mood student', lastMoodDateFormat, typeof lastMoodDateFormat)
+    }
+    // if (lastMoodOfStudent !== dateConnection) {
+    //   setOpenModal(true)
+    // }
+    setOpenModal(false)
+    return 0
+  }
 
   if (loadingStudents) {
     return <p>Loading...</p>
@@ -46,9 +66,9 @@ const StudentContainer = (): JSX.Element => {
   return (
     dataStudents.students && (
       <Student
+        firstConnectionModal={firstConnectionModal}
         handleChange={handleChange}
         students={dataStudents.students}
-        setOpenModal={setOpenModal}
         openModal={openModal}
         closeModal={closeModal}
         selectStudent={selectStudent}

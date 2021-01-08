@@ -1,24 +1,25 @@
 import React from 'react'
 
 import { NativeSelect, Button } from '@material-ui/core'
-import MoodModal from './MoodModal'
+import MoodModalContainer from './MoodModalContainer'
 
 import { StudentContainer, StudentForm } from '../../styles/element'
 
 import { IStudent } from '../../types/data'
 
 interface IStudentProps {
+  firstConnectionModal: any
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
   students: { id: string; firstname: string; lastname: string }[]
-  setOpenModal: (arg: boolean) => void
   openModal: boolean
   closeModal: () => void
   selectStudent: IStudent | undefined
 }
+
 const Student = ({
+  firstConnectionModal,
   handleChange,
   students,
-  setOpenModal,
   openModal,
   closeModal,
   selectStudent
@@ -41,13 +42,15 @@ const Student = ({
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+            firstConnectionModal()
+          }}
         >
           Ok
         </Button>
       </StudentForm>
       {openModal && selectStudent && (
-        <MoodModal
+        <MoodModalContainer
           name={selectStudent.firstname}
           id={selectStudent.id}
           closemodal={closeModal}
