@@ -1,13 +1,36 @@
-import React from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Switch, Route } from 'react-router-dom'
+import clsx from 'clsx'
 
-import { Button } from '@material-ui/core'
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import StudentContainer from './components/StudentContainer'
-import TeacherContainer from './components/TeacherContainer'
+// MUI Import
+import {
+  ThemeProvider,
+  createMuiTheme,
+  makeStyles,
+  createStyles
+} from '@material-ui/core/styles'
+import { CssBaseline } from '@material-ui/core'
 
-import { Nav } from './styles/element'
+// Common components
+import Header from './components/Header'
+import NavBar from './components/NavBar'
 
+// Student components
+import StudentContainer from './components/Student/StudentContainer'
+import StudentProfil from './components/Student/StudentProfil'
+import StudentQuiz from './components/Student/StudentQuiz'
+import StudentResource from './components/Student/StudentResource'
+import StudentStats from './components/Student/StudentStats'
+
+// Teacher components
+import TeacherHome from './components/Teacher/TeacherHome'
+import TeacherContainer from './components/Teacher/TeacherContainer'
+import TeacherClassroom from './components/Teacher/TeacherClassroom'
+import TeacherQuiz from './components/Teacher/TeacherQuiz'
+import TeacherResource from './components/Teacher/TeacherResource'
+import TeacherQuizzFollow from './components/Teacher/TeacherQuizzFollow'
+
+const drawerWidth = 240
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -21,42 +44,116 @@ const theme = createMuiTheme({
     secondary: {
       // Light grey
       main: '#f1f3f4',
-      // White
-      light: '#ffffff',
+      // Extra light blue
+      light: '#F0FDFF',
       // Average grey
       dark: '#f1f3f4'
     }
   }
 })
 
+const useStyles = makeStyles(() =>
+  createStyles({
+    app: {
+      display: 'flex'
+    },
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+      justifyContent: 'flex-end'
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      }),
+      marginLeft: -drawerWidth
+    },
+    contentShift: {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen
+      }),
+      marginLeft: 0
+    }
+  })
+)
+
+const user = {
+  firstname: 'Martin',
+  lastname: 'Lamy',
+  isStudent: true,
+  avatar:
+    'https://cdn.pixabay.com/photo/2016/11/18/19/07/happy-1836445_1280.jpg'
+}
+
 const App = (): JSX.Element => {
+  const classes = useStyles()
+  const [open, setOpen] = useState(false)
+  const [isStudent, setIsStudent] = useState(user.isStudent)
+
+  const handleDrawerOpen = () => {
+    setOpen(true)
+  }
+
+  const handleDrawerClose = () => {
+    setOpen(false)
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <div className="app-container">
-        <Switch>
-          <Route exact path="/">
-            <Nav>
-              <Button
-                variant="outlined"
-                color="secondary"
-                component={Link}
-                to="/student"
-              >
-                Student
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                component={Link}
-                to="/teacher"
-              >
-                Teacher
-              </Button>
-            </Nav>
-          </Route>
-          <Route path="/student" component={StudentContainer} />
-          <Route path="/teacher" component={TeacherContainer} />
-        </Switch>
+      <div className={classes.app}>
+        <CssBaseline />
+        <Header open={open} handleDrawerOpen={handleDrawerOpen} />
+        <NavBar open={open} handleDrawerClose={handleDrawerClose} user={user} />
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          <Switch>
+            <Route
+              path="/"
+              exact
+              component={isStudent ? StudentContainer : TeacherHome}
+            />
+            {!isStudent && (
+              <Route
+                path="/classe/suivi-des-humeurs"
+                component={TeacherContainer}
+              />
+            )}
+            {!isStudent && (
+              <Route
+                path="/classe/suivi-des-quiz"
+                component={TeacherQuizzFollow}
+              />
+            )}
+            {!isStudent && (
+              <Route path="/classe" component={TeacherClassroom} />
+            )}
+
+            {isStudent && (
+              <Route path="/profil/mes-stats" component={StudentStats} />
+            )}
+
+            {isStudent && <Route path="/profil" component={StudentProfil} />}
+            <Route
+              path="/quiz"
+              component={isStudent ? StudentQuiz : TeacherQuiz}
+            />
+            <Route
+              path="/ressources"
+              component={isStudent ? StudentResource : TeacherResource}
+            />
+          </Switch>
+        </main>
       </div>
     </ThemeProvider>
   )

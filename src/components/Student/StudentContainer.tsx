@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client'
 
 import Student from './Student'
 
-import { IStudent } from '../types/data'
+import { IStudent } from '../../types/data'
 
 const ALL_STUDENTS = gql`
   query students {

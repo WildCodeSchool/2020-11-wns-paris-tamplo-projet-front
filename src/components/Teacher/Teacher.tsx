@@ -1,5 +1,6 @@
 import React from 'react'
 
+// MUI Import
 import {
   Table,
   TableHead,
@@ -8,9 +9,12 @@ import {
   TableBody
 } from '@material-ui/core'
 
-import { IStudent } from '../types/data'
-import getStudentAverageMood from '../utils/getStudentAverageMood'
-import getDateAverageMood from '../utils/getDateAverageMood'
+// Types
+import { IStudent } from '../../types/data'
+
+// Utils
+import getStudentAverageMood from '../../utils/getStudentAverageMood'
+import getDateAverageMood from '../../utils/getDateAverageMood'
 
 interface ITeacherProps {
   students: IStudent[]

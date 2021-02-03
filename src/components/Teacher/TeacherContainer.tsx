@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client'
 
 import Teacher from './Teacher'
 
-import getUniqueDateFromStudents from '../utils/getUniqueDateFromStudents'
+import getUniqueDateFromStudents from '../../utils/getUniqueDateFromStudents'
 
 const ALL_STUDENTS = gql`
   query students {

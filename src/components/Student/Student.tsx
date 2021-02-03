@@ -3,9 +3,9 @@ import React from 'react'
 import { NativeSelect, Button } from '@material-ui/core'
 import MoodModal from './MoodModal'
 
-import { StudentContainer, StudentForm } from '../styles/element'
+import { StudentContainer, StudentForm } from '../../styles/element'
 
-import { IStudent } from '../types/data'
+import { IStudent } from '../../types/data'
 
 interface IStudentProps {
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
