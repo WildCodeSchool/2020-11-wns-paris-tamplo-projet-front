@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react'
 
+import { makeStyles } from '@material-ui/core/styles'
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
 import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
 import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
@@ -9,17 +10,6 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 
 interface IMoodModalProps {
-  classes: Record<
-    | 'button'
-    | 'text'
-    | 'modal'
-    | 'name'
-    | 'titleModal'
-    | 'moodList'
-    | 'formMood'
-    | 'labelMood',
-    string
-  >
   handleAddMood: () => void
   closeModal: () => void
   comment: string | undefined
@@ -29,9 +19,58 @@ interface IMoodModalProps {
   name: string
 }
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    width: 250,
+    margin: '2em auto',
+    color: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main
+  },
+  modal: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    width: '50%',
+    margin: 'auto',
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: '20px',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)'
+  },
+  name: {
+    color: theme.palette.primary.main
+  },
+  titleModal: {
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    alignSelf: 'flex-start',
+    padding: '1.5em'
+  },
+  text: {
+    color: theme.palette.primary.dark,
+    padding: '0.4em 0'
+  },
+  moodList: {
+    display: 'flex',
+    flexFlow: 'row nowrap'
+  },
+  formMood: {
+    display: 'flex',
+    flexFlow: 'column wrap',
+    justifyContent: 'center'
+  },
+  labelMood: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    padding: '0.5em 1em',
+    color: theme.palette.primary.dark
+  }
+}))
+
 const MoodModal = ({
   handleAddMood,
-  classes,
   closeModal,
   comment,
   setComment,
@@ -39,6 +78,8 @@ const MoodModal = ({
   setNote,
   name
 }: IMoodModalProps): JSX.Element => {
+  const classes = useStyles()
+
   return (
     <div className={classes.modal}>
       <div className={classes.titleModal}>
