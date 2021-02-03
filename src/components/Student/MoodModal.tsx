@@ -17,6 +17,7 @@ interface IMoodModalProps {
     | 'titleModal'
     | 'moodList'
     | 'formMood'
+    // | 'containerComment'
     | 'labelMood',
     string
   >
@@ -47,7 +48,7 @@ const MoodModal = ({
           <span className={classes.name}> {name}</span>,
         </Typography>
       </div>
-      <Typography variant="body1" className={classes.text}>
+      <Typography variant="h6" className={classes.text}>
         Quel est ton état d'esprit aujourd'hui ?
       </Typography>
       <form
@@ -134,20 +135,21 @@ const MoodModal = ({
             />
           </label>
         </div>
+        <div className={classes.labelMood}>
+          <label htmlFor="commentMood">
+            <Typography variant="body1">
+              Tu as un commentaire à faire sur cette note ?
+            </Typography>
+            <input
+              className={classes.labelMood}
+              id="commentMood"
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </label>
+        </div>
 
-        {note && (
-          <Typography variant="body2">
-            <label htmlFor="commentMood">
-              Tu as un commentaire à faire ?
-              <input
-                id="commentMood"
-                type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-            </label>
-          </Typography>
-        )}
         <Button variant="contained" className={classes.button} type="submit">
           Envoyer mon humeur
         </Button>

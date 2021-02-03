@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useQuery, gql } from '@apollo/client'
 
 import Student from './Student'
@@ -27,22 +28,24 @@ const StudentContainer = (): JSX.Element => {
 
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [selectStudent, setSelectStudent] = useState<IStudent>()
+  const history = useHistory()
 
-  const firstConnectionModal = () => {
+  const firstConnectionModal = (): any => {
     const dateConnection = Date.now()
     const today = new Date(dateConnection)
-    console.log('date', today.toLocaleDateString(), typeof today)
+
     if (selectStudent) {
-      const lastMoodOfStudent = selectStudent?.moods[0].created_at
-      const lastMoodDateFormat = new Date(1608217961) // <= fonctionne, il faut que l'unix timestamp fasse 10 characteres.
-      // C'est une string et pas un objet, c'est pour ça que tu galere
-      console.log('mood student', lastMoodDateFormat, typeof lastMoodDateFormat)
+      const lastMoodOfStudent = new Date(
+        selectStudent?.moods[selectStudent?.moods.length - 1]?.created_at
+      )
+
+      const isAlreadyFilled =
+        lastMoodOfStudent.toLocaleDateString() !== today.toLocaleDateString()
+          ? setOpenModal(true)
+          : history.push('/')
+      return isAlreadyFilled
     }
-    // if (lastMoodOfStudent !== dateConnection) {
-    //   setOpenModal(true)
-    // }
-    setOpenModal(false)
-    return 0
+    return null
   }
 
   if (loadingStudents) {

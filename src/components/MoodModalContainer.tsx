@@ -69,7 +69,8 @@ const useStyles = makeStyles((theme) => ({
   labelMood: {
     display: 'flex',
     flexFlow: 'column nowrap',
-    padding: '0.5em 1em'
+    padding: '0.5em 1em',
+    color: theme.palette.primary.dark
   }
 }))
 
