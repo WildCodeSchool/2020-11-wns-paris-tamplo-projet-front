@@ -17,7 +17,6 @@ interface IMoodModalProps {
     | 'titleModal'
     | 'moodList'
     | 'formMood'
-    // | 'containerComment'
     | 'labelMood',
     string
   >
