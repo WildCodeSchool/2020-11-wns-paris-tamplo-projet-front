@@ -29,6 +29,7 @@ import TeacherClassroom from './components/Teacher/TeacherClassroom'
 import TeacherQuiz from './components/Teacher/TeacherQuiz'
 import TeacherResource from './components/Teacher/TeacherResource'
 import TeacherQuizzFollow from './components/Teacher/TeacherQuizzFollow'
+import TeacherQuizEditor from './components/Teacher/TeacherQuizEditor'
 
 const drawerWidth = 240
 const theme = createMuiTheme({
@@ -87,7 +88,7 @@ const useStyles = makeStyles(() =>
 const user = {
   firstname: 'Martin',
   lastname: 'Lamy',
-  isStudent: true,
+  isStudent: false,
   avatar:
     'https://cdn.pixabay.com/photo/2016/11/18/19/07/happy-1836445_1280.jpg'
 }
@@ -144,6 +145,9 @@ const App = (): JSX.Element => {
             )}
 
             {isStudent && <Route path="/profil" component={StudentProfil} />}
+            {!isStudent && (
+              <Route path="/quiz/editor" component={TeacherQuizEditor} />
+            )}
             <Route
               path="/quiz"
               component={isStudent ? StudentQuiz : TeacherQuiz}
