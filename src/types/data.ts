@@ -10,3 +10,10 @@ export interface IStudent {
   lastname: string
   moods: IMood[]
 }
+
+export interface IUser {
+  firstname: string
+  lastname: string
+  isStudent: boolean
+  avatar: string
+}
