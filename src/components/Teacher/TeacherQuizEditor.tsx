@@ -1,8 +1,39 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useMutation, gql } from '@apollo/client'
 
+// MUI Import
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { Paper, Input, FilledInput, Checkbox, Button } from '@material-ui/core'
+import {
+  Paper,
+  Input,
+  FilledInput,
+  Checkbox,
+  Button,
+  IconButton
+} from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
+import CloseIcon from '@material-ui/icons/Close'
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
+
+// Type
+import { IQuestion, IResponse } from '../../types/quiz'
+
+const ADD_QUIZ = gql`
+  mutation createQuiz($quiz: inputQuiz) {
+    createQuiz(quiz: $quiz) {
+      title
+      comment
+      questions {
+        question
+        responses {
+          response
+          isCorrect
+        }
+      }
+    }
+  }
+`
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,22 +70,43 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     submit: {
       margin: '50px'
+    },
+    deleteQuestion: {
+      alignSelf: 'flex-end'
     }
   })
 )
 
 const TeacherQuizEditor = (): JSX.Element => {
   const classes = useStyles()
+  const history = useHistory()
+  const [addQuiz] = useMutation(ADD_QUIZ)
   const [title, setTitle] = useState()
-  const [comments, setComments] = useState()
-  const [questions, setQuestions] = useState<any[]>([])
+  const [comment, setComment] = useState()
+  const [questions, setQuestions] = useState<IQuestion[]>([])
+
+  const postQuiz = async () => {
+    try {
+      await addQuiz({
+        variables: {
+          quiz: {
+            title,
+            comment,
+            questions
+          }
+        }
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   const addTitle = (e: any) => {
     setTitle(e.target.value)
   }
 
-  const addComments = (e: any) => {
-    setComments(e.target.value)
+  const addComment = (e: any) => {
+    setComment(e.target.value)
   }
 
   const addQuestion = () => {
@@ -72,7 +124,13 @@ const TeacherQuizEditor = (): JSX.Element => {
     setQuestions(questionsTemp)
   }
 
-  const addResponse = (i: any) => {
+  const removeQuestion = (i: number) => {
+    const questionsTemp = [...questions]
+    questionsTemp.splice(i, 1)
+    setQuestions(questionsTemp)
+  }
+
+  const addResponse = (i: number) => {
     const questionsTemp = [...questions]
     const newResponse = {
       response: '',
@@ -82,19 +140,25 @@ const TeacherQuizEditor = (): JSX.Element => {
     setQuestions(questionsTemp)
   }
 
-  const handleChangeQuestion = (text: any, i: any) => {
+  const removeResponse = (i: number, j: number) => {
+    const questionsTemp = [...questions]
+    questionsTemp[i].responses.splice(j, 1)
+    setQuestions(questionsTemp)
+  }
+
+  const handleChangeQuestion = (text: string, i: number) => {
     const questionsTemp = [...questions]
     questionsTemp[i].question = text
     setQuestions(questionsTemp)
   }
 
-  const handleChangeResponse = (text: any, i: any, j: any) => {
+  const handleChangeResponse = (text: string, i: number, j: number) => {
     const questionsTemp = [...questions]
     questionsTemp[i].responses[j].response = text
     setQuestions(questionsTemp)
   }
 
-  const handleChangeCheck = (isChecked: any, i: any, j: any) => {
+  const handleChangeCheck = (isChecked: boolean, i: number, j: number) => {
     const questionsTemp = [...questions]
     questionsTemp[i].responses[j].isCorrect = isChecked
     setQuestions(questionsTemp)
@@ -114,15 +178,15 @@ const TeacherQuizEditor = (): JSX.Element => {
         />
         <Input
           id="description"
-          value={comments}
+          value={comment}
           placeholder="Description du quiz"
           multiline
           fullWidth
-          onChange={addComments}
+          onChange={addComment}
         />
       </Paper>
       {questions.length > 0 &&
-        questions.map((question, indexQ) => (
+        questions.map((question: IQuestion, indexQ: number) => (
           <Paper elevation={2} className={classes.paper}>
             <FilledInput
               value={question.question}
@@ -132,7 +196,7 @@ const TeacherQuizEditor = (): JSX.Element => {
               className={classes.question}
               onChange={(e) => handleChangeQuestion(e.target.value, indexQ)}
             />
-            {question.responses.map((response: any, indexR: any) => (
+            {question.responses.map((response: IResponse, indexR: number) => (
               <div className={classes.answer}>
                 <Input
                   value={response.response}
@@ -150,6 +214,9 @@ const TeacherQuizEditor = (): JSX.Element => {
                     handleChangeCheck(e.target.checked, indexQ, indexR)
                   }
                 />
+                <IconButton onClick={() => removeResponse(indexQ, indexR)}>
+                  <CloseIcon />
+                </IconButton>
               </div>
             ))}
             <Button
@@ -160,6 +227,12 @@ const TeacherQuizEditor = (): JSX.Element => {
             >
               Ajouter une option
             </Button>
+            <IconButton
+              className={classes.deleteQuestion}
+              onClick={() => removeQuestion(indexQ)}
+            >
+              <DeleteOutlineIcon />
+            </IconButton>
           </Paper>
         ))}
       <Button
@@ -170,7 +243,20 @@ const TeacherQuizEditor = (): JSX.Element => {
       >
         Ajouter une question
       </Button>
-      <Button className={classes.submit} color="primary" variant="contained">
+      <Button
+        className={classes.submit}
+        color="primary"
+        variant="contained"
+        onClick={async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+          e.preventDefault()
+          try {
+            postQuiz()
+            history.goBack()
+          } catch (error) {
+            console.error(error)
+          }
+        }}
+      >
         Enregistrer le quiz
       </Button>
     </div>
