@@ -42,7 +42,7 @@ const StudentContainer = (): JSX.Element => {
       const isAlreadyFilled =
         lastMoodOfStudent.toLocaleDateString() !== today.toLocaleDateString()
           ? setOpenModal(true)
-          : history.push('/')
+          : history.push('/profil')
       return isAlreadyFilled
     }
     return null
