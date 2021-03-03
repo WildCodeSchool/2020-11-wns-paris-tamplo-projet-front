@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
@@ -13,9 +13,9 @@ interface IMoodModalProps {
   handleAddMood: () => void
   closeModal: () => void
   comment: string | undefined
-  setComment: Dispatch<SetStateAction<string | undefined>>
+  setComment: (a: string) => void
   note: number | undefined
-  setNote: Dispatch<SetStateAction<number | undefined>>
+  setNote: (a: number) => void
   name: string
 }
 
@@ -49,8 +49,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '1.5em'
   },
   text: {
-    color: theme.palette.primary.dark,
-    padding: '0.4em 0'
+    color: theme.palette.primary.dark
   },
   moodList: {
     display: 'flex',
@@ -64,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
   labelMood: {
     display: 'flex',
     flexFlow: 'column nowrap',
+    margin: 'auto',
     padding: '0.5em 1em',
     color: theme.palette.primary.dark
   }
