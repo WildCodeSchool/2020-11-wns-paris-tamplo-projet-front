@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useQuery, gql } from '@apollo/client'
 
 import Student from './Student'
@@ -11,6 +12,9 @@ const ALL_STUDENTS = gql`
       id
       firstname
       lastname
+      moods {
+        created_at
+      }
     }
   }
 `
@@ -24,6 +28,25 @@ const StudentContainer = (): JSX.Element => {
 
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [selectStudent, setSelectStudent] = useState<IStudent>()
+  const history = useHistory()
+
+  const firstConnectionModal = (): any => {
+    const dateConnection = Date.now()
+    const today = new Date(dateConnection)
+
+    if (selectStudent) {
+      const lastMoodOfStudent = new Date(
+        selectStudent?.moods[selectStudent?.moods.length - 1]?.created_at
+      )
+
+      const isAlreadyFilled =
+        lastMoodOfStudent.toLocaleDateString() !== today.toLocaleDateString()
+          ? setOpenModal(true)
+          : history.push('/profil')
+      return isAlreadyFilled
+    }
+    return null
+  }
 
   if (loadingStudents) {
     return <p>Loading...</p>
@@ -46,9 +69,9 @@ const StudentContainer = (): JSX.Element => {
   return (
     dataStudents.students && (
       <Student
+        firstConnectionModal={firstConnectionModal}
         handleChange={handleChange}
         students={dataStudents.students}
-        setOpenModal={setOpenModal}
         openModal={openModal}
         closeModal={closeModal}
         selectStudent={selectStudent}

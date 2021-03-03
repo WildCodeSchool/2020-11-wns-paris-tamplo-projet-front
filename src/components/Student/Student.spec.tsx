@@ -11,10 +11,10 @@ const defaultProps = {
       lastname: 'Doe'
     }
   ],
-  setOpenModal: jest.fn(),
   openModal: false,
   closeModal: jest.fn(),
-  selectStudent: undefined
+  selectStudent: undefined,
+  firstConnectionModal: jest.fn()
 }
 
 describe('Student', () => {
@@ -23,7 +23,7 @@ describe('Student', () => {
       <Student
         handleChange={defaultProps.handleChange}
         students={defaultProps.students}
-        setOpenModal={defaultProps.setOpenModal}
+        firstConnectionModal={defaultProps.firstConnectionModal}
         openModal={defaultProps.openModal}
         closeModal={defaultProps.closeModal}
         selectStudent={defaultProps.selectStudent}

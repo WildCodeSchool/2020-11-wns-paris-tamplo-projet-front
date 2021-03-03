@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { useMutation, gql } from '@apollo/client'
+import React from 'react'
 
+import { makeStyles } from '@material-ui/core/styles'
 import MoodOutlinedIcon from '@material-ui/icons/MoodOutlined'
 import MoodBadOutlinedIcon from '@material-ui/icons/MoodBadOutlined'
 import SentimentVeryDissatisfiedOutlinedIcon from '@material-ui/icons/SentimentVeryDissatisfiedOutlined'
@@ -8,28 +8,16 @@ import SentimentVerySatisfiedOutlinedIcon from '@material-ui/icons/SentimentVery
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/core/styles'
 
-interface IProps {
-  id: string
+interface IMoodModalProps {
+  handleAddMood: () => void
+  closeModal: () => void
+  comment: string | undefined
+  setComment: (a: string) => void
+  note: number | undefined
+  setNote: (a: number) => void
   name: string
-  closemodal: () => void
 }
-
-const ADD_MOOD = gql`
-  mutation updateMoodStudent($id: String, $mood: inputMood) {
-    updateMoodStudent(id: $id, mood: $mood) {
-      id
-      firstname
-      lastname
-      moods {
-        note
-        comment
-        created_at
-      }
-    }
-  }
-`
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -61,8 +49,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '1.5em'
   },
   text: {
-    color: theme.palette.primary.dark,
-    padding: '0.4em 0'
+    color: theme.palette.primary.dark
   },
   moodList: {
     display: 'flex',
@@ -76,31 +63,22 @@ const useStyles = makeStyles((theme) => ({
   labelMood: {
     display: 'flex',
     flexFlow: 'column nowrap',
-    padding: '0.5em 1em'
+    margin: 'auto',
+    padding: '0.5em 1em',
+    color: theme.palette.primary.dark
   }
 }))
 
-const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
-  const [addMood] = useMutation(ADD_MOOD)
-  const [note, setNote] = useState<number>()
-  const [comment, setComment] = useState<string>()
+const MoodModal = ({
+  handleAddMood,
+  closeModal,
+  comment,
+  setComment,
+  note,
+  setNote,
+  name
+}: IMoodModalProps): JSX.Element => {
   const classes = useStyles()
-
-  const handleAddMood = async () => {
-    try {
-      await addMood({
-        variables: {
-          id,
-          mood: {
-            note,
-            comment
-          }
-        }
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   return (
     <div className={classes.modal}>
@@ -110,7 +88,7 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
           <span className={classes.name}> {name}</span>,
         </Typography>
       </div>
-      <Typography variant="body1" className={classes.text}>
+      <Typography variant="h6" className={classes.text}>
         Quel est ton état d'esprit aujourd'hui ?
       </Typography>
       <form
@@ -119,7 +97,7 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
           e.preventDefault()
           try {
             handleAddMood()
-            closemodal()
+            closeModal()
           } catch (error) {
             console.error(error)
           }
@@ -197,12 +175,21 @@ const MoodModal = ({ id, name, closemodal }: IProps): JSX.Element => {
             />
           </label>
         </div>
+        <div className={classes.labelMood}>
+          <label htmlFor="commentMood">
+            <Typography variant="body1">
+              Tu as un commentaire à faire sur cette note ?
+            </Typography>
+            <input
+              className={classes.labelMood}
+              id="commentMood"
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </label>
+        </div>
 
-        {note && (
-          <Typography variant="body2">
-            Tu as selectionné l'humeur {note} !
-          </Typography>
-        )}
         <Button variant="contained" className={classes.button} type="submit">
           Envoyer mon humeur
         </Button>
