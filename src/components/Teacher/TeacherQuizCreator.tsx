@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useMutation, gql } from '@apollo/client'
 
@@ -17,12 +17,11 @@ import CloseIcon from '@material-ui/icons/Close'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 
 // Type
-import { IQuestion, IQuiz, IResponse } from '../../types/quiz'
+import { IQuestion, IResponse } from '../../types/quiz'
 
-const UPDATE_QUIZ = gql`
-  mutation updateQuiz($id: String, $quiz: inputQuiz) {
-    updateQuiz(id: $id, quiz: $quiz) {
-      id
+const ADD_QUIZ = gql`
+  mutation createQuiz($quiz: inputQuiz) {
+    createQuiz(quiz: $quiz) {
       title
       comment
       questions {
@@ -78,33 +77,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const TeacherQuizEditor = (props: any): JSX.Element => {
+const TeacherQuizCreator = (): JSX.Element => {
   const classes = useStyles()
   const history = useHistory()
-  const [updateQuiz] = useMutation(UPDATE_QUIZ, { refetchQueries: ['quizzes'] })
-  const [idQuiz, setIdQuiz] = useState()
+  const [addQuiz] = useMutation(ADD_QUIZ)
   const [title, setTitle] = useState()
   const [comment, setComment] = useState()
   const [questions, setQuestions] = useState<IQuestion[]>([])
 
-  useEffect(() => {
-    const propsQuiz = props.location.state.quiz
-    console.log(propsQuiz)
-    setIdQuiz(propsQuiz.id)
-    setTitle(propsQuiz.title)
-    if (propsQuiz.comment) {
-      setComment(propsQuiz.comment)
-    }
-    setQuestions(propsQuiz.questions)
-    // eslint-disable-next-line
-  }, [])
-
-  const editQuiz = async () => {
+  const postQuiz = async () => {
     try {
-      await updateQuiz({
+      await addQuiz({
         variables: {
-          id: idQuiz,
           quiz: {
             title,
             comment,
@@ -266,13 +250,12 @@ const TeacherQuizEditor = (props: any): JSX.Element => {
         onClick={async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           e.preventDefault()
           try {
-            editQuiz()
+            postQuiz()
             history.goBack()
           } catch (error) {
             console.error(error)
           }
         }}
-        // onClick={() => console.log(questions)}
       >
         Enregistrer le quiz
       </Button>
@@ -280,4 +263,4 @@ const TeacherQuizEditor = (props: any): JSX.Element => {
   )
 }
 
-export default TeacherQuizEditor
+export default TeacherQuizCreator
