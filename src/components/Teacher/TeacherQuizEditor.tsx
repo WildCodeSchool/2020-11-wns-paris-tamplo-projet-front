@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useMutation, gql } from '@apollo/client'
 
 // MUI Import
@@ -17,7 +17,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 
 // Type
-import { IQuestion, IResponse } from '../../types/quiz'
+import { IQuestion, IQuiz, IResponse } from '../../types/quiz'
 
 const ADD_QUIZ = gql`
   mutation createQuiz($quiz: inputQuiz) {
@@ -94,20 +94,24 @@ const useStyles = makeStyles(() =>
   })
 )
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const TeacherQuizEditor = (props: any): JSX.Element => {
+interface ILocation {
+  quiz: IQuiz
+}
+
+const TeacherQuizEditor = (): JSX.Element => {
   const classes = useStyles()
   const history = useHistory()
+  const { state: locationState } = useLocation<ILocation>()
   const [addQuiz] = useMutation(ADD_QUIZ, { refetchQueries: ['quizzes'] })
   const [updateQuiz] = useMutation(UPDATE_QUIZ, { refetchQueries: ['quizzes'] })
-  const [idQuiz, setIdQuiz] = useState()
-  const [title, setTitle] = useState<string>('')
-  const [comment, setComment] = useState()
+  const [idQuiz, setIdQuiz] = useState<string>()
+  const [title, setTitle] = useState<string>()
+  const [comment, setComment] = useState<string>()
   const [questions, setQuestions] = useState<IQuestion[]>([])
 
   useEffect(() => {
-    if (props.location.state !== undefined) {
-      const propsQuiz = props.location.state.quiz
+    if (locationState !== undefined) {
+      const propsQuiz = locationState.quiz
       setIdQuiz(propsQuiz.id)
       setTitle(propsQuiz.title)
       if (propsQuiz.comment) {
@@ -300,7 +304,7 @@ const TeacherQuizEditor = (props: any): JSX.Element => {
         onClick={async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           e.preventDefault()
           try {
-            if (props.location.state !== undefined) {
+            if (locationState !== undefined) {
               editQuiz()
             } else {
               postQuiz()
