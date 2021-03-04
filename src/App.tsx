@@ -48,7 +48,7 @@ const theme = createMuiTheme({
       // Extra light blue
       light: '#F0FDFF',
       // Average grey
-      dark: '#f1f3f4'
+      dark: '#C8D3D4'
     }
   }
 })

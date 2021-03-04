@@ -3,10 +3,16 @@ import { useQuery, gql, useMutation } from '@apollo/client'
 import { Link } from 'react-router-dom'
 
 // MUI Import
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { Button, IconButton } from '@material-ui/core'
+import {
+  makeStyles,
+  createStyles,
+  Theme,
+  withStyles
+} from '@material-ui/core/styles'
+import { Switch, IconButton, LinearProgress } from '@material-ui/core'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
+import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined'
 
 // Type
 import { IQuiz } from '../../types/quiz'
@@ -33,16 +39,47 @@ const DELETE_QUIZ = gql`
   }
 `
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     quizItem: {
       width: '80%',
-      margin: 'auto',
+      margin: '20px auto',
       display: 'flex',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    createQuizz: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginBottom: '30px'
+    },
+    labelCreate: {
+      marginRight: '5px'
+    },
+    quizTitle: {
+      fontWeight: 'bold',
+      width: '100px',
+      marginRight: '5px'
     }
   })
 )
+
+const BorderLinearProgress = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '40%',
+      height: 10,
+      borderRadius: 5
+    },
+    colorPrimary: {
+      backgroundColor: theme.palette.secondary.dark
+    },
+    bar: {
+      borderRadius: 5,
+      backgroundColor: theme.palette.primary.main
+    }
+  })
+)(LinearProgress)
 
 const TeacherQuiz = (): JSX.Element => {
   const classes = useStyles()
@@ -76,14 +113,19 @@ const TeacherQuiz = (): JSX.Element => {
 
   return (
     <div className="teacherHome-container">
-      <p>Je suis la page quiz du Teacher</p>
-      <Button component={Link} to="/quiz/editor">
-        Créer un quiz
-      </Button>
+      <div className={classes.createQuizz}>
+        <p className={classes.labelCreate}>Créer un quizz</p>
+        <IconButton component={Link} to="/quiz/editor">
+          <AddCircleOutlinedIcon color="primary" />
+        </IconButton>
+      </div>
       {quizzesDataWritable.quizzes &&
         quizzesDataWritable.quizzes.map((quiz: IQuiz) => (
           <div className={classes.quizItem}>
-            <p key={quiz.title}>{quiz.title}</p>
+            <p className={classes.quizTitle} key={quiz.title}>
+              {quiz.title}
+            </p>
+            <BorderLinearProgress variant="determinate" value={50} />
             <div>
               <Link
                 to={{
@@ -100,6 +142,7 @@ const TeacherQuiz = (): JSX.Element => {
               <IconButton onClick={() => removeQuiz(quiz.id)}>
                 <DeleteOutlineIcon />
               </IconButton>
+              <Switch color="primary" />
             </div>
           </div>
         ))}

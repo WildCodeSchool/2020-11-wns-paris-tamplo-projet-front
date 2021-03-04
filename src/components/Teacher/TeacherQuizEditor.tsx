@@ -3,7 +3,12 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { useMutation, gql } from '@apollo/client'
 
 // MUI Import
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  createStyles,
+  Theme,
+  withStyles
+} from '@material-ui/core/styles'
 import {
   Paper,
   Input,
@@ -52,7 +57,7 @@ const UPDATE_QUIZ = gql`
   }
 `
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     quiz: {
       display: 'flex',
@@ -93,6 +98,16 @@ const useStyles = makeStyles(() =>
     }
   })
 )
+
+const SubmitButton = withStyles((theme: Theme) => ({
+  root: {
+    margin: '50px',
+    color: theme.palette.secondary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark
+    }
+  }
+}))(Button)
 
 interface ILocation {
   quiz: IQuiz
@@ -297,8 +312,8 @@ const TeacherQuizEditor = (): JSX.Element => {
       >
         Ajouter une question
       </Button>
-      <Button
-        className={classes.submit}
+      <SubmitButton
+        // className={classes.submit}
         color="primary"
         variant="contained"
         onClick={async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -316,7 +331,7 @@ const TeacherQuizEditor = (): JSX.Element => {
         }}
       >
         Enregistrer le quiz
-      </Button>
+      </SubmitButton>
     </div>
   )
 }
