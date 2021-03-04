@@ -29,7 +29,6 @@ import TeacherClassroom from './components/Teacher/TeacherClassroom'
 import TeacherQuiz from './components/Teacher/TeacherQuiz'
 import TeacherResource from './components/Teacher/TeacherResource'
 import TeacherQuizzFollow from './components/Teacher/TeacherQuizzFollow'
-import TeacherQuizCreator from './components/Teacher/TeacherQuizCreator'
 import TeacherQuizEditor from './components/Teacher/TeacherQuizEditor'
 
 const drawerWidth = 240
@@ -146,9 +145,6 @@ const App = (): JSX.Element => {
             )}
 
             {isStudent && <Route path="/profil" component={StudentProfil} />}
-            {!isStudent && (
-              <Route path="/quiz/create" component={TeacherQuizCreator} />
-            )}
             {!isStudent && (
               <Route path="/quiz/editor" component={TeacherQuizEditor} />
             )}

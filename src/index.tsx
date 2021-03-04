@@ -8,8 +8,7 @@ import reportWebVitals from './reportWebVitals'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
-  cache: new InMemoryCache({ addTypename: false }),
-  assumeImmutableResults: true
+  cache: new InMemoryCache({ addTypename: false })
 })
 
 ReactDOM.render(
