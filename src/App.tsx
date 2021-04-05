@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Switch, Route } from 'react-router-dom'
 import clsx from 'clsx'
 
 // MUI Import
@@ -14,22 +13,7 @@ import { CssBaseline } from '@material-ui/core'
 // Common components
 import Header from './components/Header'
 import NavBar from './components/NavBar'
-
-// Student components
-import StudentContainer from './components/Student/StudentContainer'
-import StudentProfil from './components/Student/StudentProfil'
-import StudentQuiz from './components/Student/StudentQuiz'
-import StudentResource from './components/Student/StudentResource'
-import StudentStats from './components/Student/StudentStats'
-
-// Teacher components
-import TeacherHome from './components/Teacher/TeacherHome'
-import TeacherContainer from './components/Teacher/TeacherContainer'
-import TeacherClassroom from './components/Teacher/TeacherClassroom'
-import TeacherQuiz from './components/Teacher/TeacherQuiz'
-import TeacherResource from './components/Teacher/TeacherResource'
-import TeacherQuizzFollow from './components/Teacher/TeacherQuizzFollow'
-import TeacherQuizEditor from './components/Teacher/TeacherQuizEditor'
+import AppRouter from './components/Router/AppRouter'
 
 const drawerWidth = 240
 const theme = createMuiTheme({
@@ -118,45 +102,7 @@ const App = (): JSX.Element => {
           })}
         >
           <div className={classes.drawerHeader} />
-          <Switch>
-            <Route
-              path="/"
-              exact
-              component={isStudent ? StudentContainer : TeacherHome}
-            />
-            {!isStudent && (
-              <Route
-                path="/classe/suivi-des-humeurs"
-                component={TeacherContainer}
-              />
-            )}
-            {!isStudent && (
-              <Route
-                path="/classe/suivi-des-quiz"
-                component={TeacherQuizzFollow}
-              />
-            )}
-            {!isStudent && (
-              <Route path="/classe" component={TeacherClassroom} />
-            )}
-
-            {isStudent && (
-              <Route path="/profil/mes-stats" component={StudentStats} />
-            )}
-
-            {isStudent && <Route path="/profil" component={StudentProfil} />}
-            {!isStudent && (
-              <Route path="/quiz/editor" component={TeacherQuizEditor} />
-            )}
-            <Route
-              path="/quiz"
-              component={isStudent ? StudentQuiz : TeacherQuiz}
-            />
-            <Route
-              path="/ressources"
-              component={isStudent ? StudentResource : TeacherResource}
-            />
-          </Switch>
+          <AppRouter isStudent={isStudent} />
         </main>
       </div>
     </ThemeProvider>

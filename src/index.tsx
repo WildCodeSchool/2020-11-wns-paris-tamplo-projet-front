@@ -1,14 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
+
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { BrowserRouter } from 'react-router-dom'
-import App from './App'
 import reportWebVitals from './reportWebVitals'
+
+import App from './App'
+
+import './index.css'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  headers: {
+    authorization: localStorage.getItem('token') || ''
+  }
 })
 
 ReactDOM.render(
