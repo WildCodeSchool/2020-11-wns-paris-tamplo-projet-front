@@ -1,7 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  createHttpLink
+} from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 import { BrowserRouter } from 'react-router-dom'
 import reportWebVitals from './reportWebVitals'
 
@@ -9,12 +15,26 @@ import App from './App'
 
 import './index.css'
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000',
-  cache: new InMemoryCache(),
-  headers: {
-    authorization: localStorage.getItem('token') || ''
+const httpLink = createHttpLink({
+  uri: 'http://localhost:4000'
+})
+
+// Middleware to add authorization token to every gql call in headers
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token')
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
   }
+})
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
 })
 
 ReactDOM.render(
