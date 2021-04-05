@@ -19,7 +19,7 @@ const SignIn = (): JSX.Element => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    login(loginForm.email, loginForm.password).then((res) => {
+    login(loginForm.email, loginForm.password).then(() => {
       setRedirectToReferrer(true)
     })
   }

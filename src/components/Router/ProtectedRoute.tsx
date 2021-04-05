@@ -1,9 +1,16 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Redirect, RouteProps } from 'react-router-dom'
 
-// HOC to protect the route
-const ProtectedRoute = ({ component: Component, ...rest }: any) => {
+interface IPrivateRouteProps extends RouteProps {
+  component: any
+}
+
+const ProtectedRoute = ({
+  component: Component,
+  ...rest
+}: IPrivateRouteProps): JSX.Element => {
   return (
+    /* eslint-disable react/jsx-props-no-spreading */
     <Route
       {...rest}
       render={(props: any) => {
@@ -11,7 +18,7 @@ const ProtectedRoute = ({ component: Component, ...rest }: any) => {
         const token = localStorage.getItem('token')
 
         return token ? (
-          <Component />
+          <Component {...props} />
         ) : (
           <Redirect
             to={{

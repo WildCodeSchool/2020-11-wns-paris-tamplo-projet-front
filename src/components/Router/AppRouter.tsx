@@ -23,7 +23,7 @@ import TeacherResource from '../Teacher/TeacherResource'
 import TeacherQuizzFollow from '../Teacher/TeacherQuizzFollow'
 import TeacherQuizEditor from '../Teacher/TeacherQuizEditor'
 
-const AppRouter = ({ isStudent }: any): JSX.Element => (
+const AppRouter = ({ isStudent }: { isStudent: boolean }): JSX.Element => (
   <Switch>
     <Route exact path="/signin" component={SignIn} />
     <ProtectedRoute

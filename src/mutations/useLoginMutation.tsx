@@ -12,7 +12,7 @@ const LoginMutationGQL = gql`
   }
 `
 
-const useLoginMutation = () => {
+const useLoginMutation = (): any => {
   const [mutation, mutationResults] = useMutation(LoginMutationGQL, {
     onCompleted: (data) => {
       localStorage.setItem('token', data.login.token)
