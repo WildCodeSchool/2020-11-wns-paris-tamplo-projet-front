@@ -90,9 +90,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 'auto',
       margin: '20px auto'
     },
-    submit: {
-      margin: '50px'
-    },
     deleteQuestion: {
       alignSelf: 'flex-end'
     }
@@ -313,7 +310,6 @@ const TeacherQuizEditor = (): JSX.Element => {
         Ajouter une question
       </Button>
       <SubmitButton
-        // className={classes.submit}
         color="primary"
         variant="contained"
         onClick={async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
