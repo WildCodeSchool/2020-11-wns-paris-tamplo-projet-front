@@ -1,4 +1,5 @@
 export interface IQuiz {
+  id: string
   title: string
   comment: string
   questions: IQuestion[]
