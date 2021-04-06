@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useMutation, gql } from '@apollo/client'
 
 // MUI Import
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  createStyles,
+  Theme,
+  withStyles
+} from '@material-ui/core/styles'
 import {
   Paper,
   Input,
@@ -17,11 +22,28 @@ import CloseIcon from '@material-ui/icons/Close'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 
 // Type
-import { IQuestion, IResponse } from '../../types/quiz'
+import { IQuestion, IQuiz, IResponse } from '../../types/quiz'
 
 const ADD_QUIZ = gql`
   mutation createQuiz($quiz: inputQuiz) {
     createQuiz(quiz: $quiz) {
+      title
+      comment
+      questions {
+        question
+        responses {
+          response
+          isCorrect
+        }
+      }
+    }
+  }
+`
+
+const UPDATE_QUIZ = gql`
+  mutation updateQuiz($id: String, $quiz: inputQuiz) {
+    updateQuiz(id: $id, quiz: $quiz) {
+      id
       title
       comment
       questions {
@@ -68,27 +90,71 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 'auto',
       margin: '20px auto'
     },
-    submit: {
-      margin: '50px'
-    },
     deleteQuestion: {
       alignSelf: 'flex-end'
     }
   })
 )
 
+const SubmitButton = withStyles((theme: Theme) => ({
+  root: {
+    margin: '50px',
+    color: theme.palette.secondary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark
+    }
+  }
+}))(Button)
+
+interface ILocation {
+  quiz: IQuiz
+}
+
 const TeacherQuizEditor = (): JSX.Element => {
   const classes = useStyles()
   const history = useHistory()
-  const [addQuiz] = useMutation(ADD_QUIZ)
-  const [title, setTitle] = useState()
-  const [comment, setComment] = useState()
+  const { state: locationState } = useLocation<ILocation>()
+  const [addQuiz] = useMutation(ADD_QUIZ, { refetchQueries: ['quizzes'] })
+  const [updateQuiz] = useMutation(UPDATE_QUIZ, { refetchQueries: ['quizzes'] })
+  const [idQuiz, setIdQuiz] = useState<string>()
+  const [title, setTitle] = useState<string>()
+  const [comment, setComment] = useState<string>()
   const [questions, setQuestions] = useState<IQuestion[]>([])
+
+  useEffect(() => {
+    if (locationState !== undefined) {
+      const propsQuiz = locationState.quiz
+      setIdQuiz(propsQuiz.id)
+      setTitle(propsQuiz.title)
+      if (propsQuiz.comment) {
+        setComment(propsQuiz.comment)
+      }
+      setQuestions(propsQuiz.questions)
+    }
+    // eslint-disable-next-line
+  }, [])
 
   const postQuiz = async () => {
     try {
       await addQuiz({
         variables: {
+          quiz: {
+            title,
+            comment,
+            questions
+          }
+        }
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const editQuiz = async () => {
+    try {
+      await updateQuiz({
+        variables: {
+          id: idQuiz,
           quiz: {
             title,
             comment,
@@ -243,14 +309,17 @@ const TeacherQuizEditor = (): JSX.Element => {
       >
         Ajouter une question
       </Button>
-      <Button
-        className={classes.submit}
+      <SubmitButton
         color="primary"
         variant="contained"
         onClick={async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           e.preventDefault()
           try {
-            postQuiz()
+            if (locationState !== undefined) {
+              editQuiz()
+            } else {
+              postQuiz()
+            }
             history.goBack()
           } catch (error) {
             console.error(error)
@@ -258,7 +327,7 @@ const TeacherQuizEditor = (): JSX.Element => {
         }}
       >
         Enregistrer le quiz
-      </Button>
+      </SubmitButton>
     </div>
   )
 }
