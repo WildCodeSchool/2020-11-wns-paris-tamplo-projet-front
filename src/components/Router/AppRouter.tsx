@@ -13,6 +13,7 @@ import StudentProfil from '../Student/StudentProfil'
 import StudentQuiz from '../Student/StudentQuiz'
 import StudentResource from '../Student/StudentResource'
 import StudentStats from '../Student/StudentStats'
+import StudentQuizResponse from '../Student/StudentQuizResponse'
 
 // Teacher components
 import TeacherHome from '../Teacher/TeacherHome'
@@ -49,6 +50,11 @@ const AppRouter = ({ isStudent }: { isStudent: boolean }): JSX.Element => (
           component={StudentStats}
         />
         <ProtectedRoute exact path="/profil" component={StudentProfil} />
+        <ProtectedRoute
+          exact
+          path="/quiz/response"
+          component={StudentQuizResponse}
+        />
       </>
     )}
     {!isStudent && (
