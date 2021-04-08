@@ -28,7 +28,7 @@ import TeacherQuizEditor from '../Teacher/TeacherQuizEditor'
 const AppRouter = ({ isStudent }: { isStudent: boolean }): JSX.Element => (
   <Switch>
     <Route exact path="/signin" component={SignIn} />
-    <Route exact path="/signup" component={SignUp} />
+    <ProtectedRoute exact path="/signup" component={SignUp} />
     <ProtectedRoute
       exact
       path="/"

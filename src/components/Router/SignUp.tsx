@@ -6,9 +6,10 @@ import MuiAlert, { AlertProps } from '@material-ui/lab/Alert'
 
 import useSignUpMutation from '../../mutations/useSignUpMutation'
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />
-}
+const Alert = (props: AlertProps) => (
+  /* eslint-disable react/jsx-props-no-spreading */
+  <MuiAlert elevation={6} variant="filled" {...props} />
+)
 
 const SignUp = (): JSX.Element => {
   const signUpFormInitValues = {
@@ -23,28 +24,35 @@ const SignUp = (): JSX.Element => {
     setSignUpForm
   ] = useState(signUpFormInitValues)
   const [signUp, mutationResults] = useSignUpMutation()
-  const [message, setMessage] = useState('')
+  const [{ success, message }, setResponseStatus] = useState({
+    success: null,
+    message: ''
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log(e.target)
     const { name, value } = e.target
     setSignUpForm((prevValues) => ({ ...prevValues, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
-    console.log(firstname, lastname, email, password, status)
-    signUp(firstname, lastname, email, password, status).then(
-      (response: any) => {
+    signUp(firstname, lastname, email, password, status)
+      .then((response: any) => {
         const result = response?.data?.signup
-        console.log(result)
-        console.log(response)
         if (result && result.success) {
-          setMessage(result.message)
+          setResponseStatus({
+            success: result.success,
+            message: result.message
+          })
           setSignUpForm({ ...signUpFormInitValues })
         }
-      }
-    )
+      })
+      .catch((err: Error) => {
+        setResponseStatus((prevState) => ({
+          ...prevState,
+          message: err.message
+        }))
+      })
   }
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -52,7 +60,7 @@ const SignUp = (): JSX.Element => {
       return
     }
 
-    setMessage('')
+    setResponseStatus((prevState) => ({ ...prevState, message: '' }))
   }
 
   return (
@@ -91,10 +99,11 @@ const SignUp = (): JSX.Element => {
           type="password"
           onChange={handleChange}
         />
-        {/* This give a warning cause by MUI use native MUI select instead */}
+        {/* This give a warning cause by MUI... can use MUI native select instead */}
         <TextField
-          id="status"
+          required
           select
+          id="status"
           label="Status"
           name="status"
           value={status}
@@ -110,20 +119,16 @@ const SignUp = (): JSX.Element => {
           Enregistrer
         </Button>
       </form>
-      <Snackbar open={!!message} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
+      <Snackbar
+        open={!!message}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity={success ? 'success' : 'error'}>
+          {message}
         </Alert>
       </Snackbar>
-      {/* <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        autoHideDuration={2000}
-        open={!!message}
-        onClose={handleClose}
-        message={message}
-        color="blue"
-        key="topright"
-      /> */}
     </>
   )
 }
