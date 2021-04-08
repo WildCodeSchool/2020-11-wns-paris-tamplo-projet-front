@@ -8,7 +8,7 @@ const SignIn = (): JSX.Element => {
     email: '',
     password: ''
   }
-  const [loginForm, setLoginForm] = useState(loginFormInitValues)
+  const [{ email, password }, setLoginForm] = useState(loginFormInitValues)
   const [login, mutationResults] = useLoginMutation()
   const [redirectToReferrer, setRedirectToReferrer] = useState(false)
 
@@ -19,7 +19,7 @@ const SignIn = (): JSX.Element => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    login(loginForm.email, loginForm.password).then(() => {
+    login(email, password).then(() => {
       setRedirectToReferrer(true)
     })
   }
@@ -34,16 +34,11 @@ const SignIn = (): JSX.Element => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="email"
-          value={loginForm.email}
-          onChange={handleChange}
-        />
+        <input type="text" name="email" value={email} onChange={handleChange} />
         <input
           name="password"
           type="password"
-          value={loginForm.password}
+          value={password}
           onChange={handleChange}
         />
         <button type="submit">Login</button>
