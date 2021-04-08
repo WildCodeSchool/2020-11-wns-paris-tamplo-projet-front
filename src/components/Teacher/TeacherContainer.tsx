@@ -6,8 +6,8 @@ import Teacher from './Teacher'
 import getUniqueDateFromStudents from '../../utils/getUniqueDateFromStudents'
 
 const ALL_STUDENTS = gql`
-  query students {
-    students {
+  query users {
+    users {
       id
       firstname
       lastname
@@ -30,7 +30,7 @@ const TeacherContainer = (): JSX.Element => {
 
   useEffect(() => {
     if (dataStudents) {
-      setDates(getUniqueDateFromStudents(dataStudents.students))
+      setDates(getUniqueDateFromStudents(dataStudents.users))
     }
     // eslint-disable-next-line
   }, [dataStudents])
@@ -43,8 +43,8 @@ const TeacherContainer = (): JSX.Element => {
   }
 
   return (
-    dataStudents.students && (
-      <Teacher students={dataStudents.students} dates={dates} />
+    dataStudents.users && (
+      <Teacher students={dataStudents.users} dates={dates} />
     )
   )
 }
