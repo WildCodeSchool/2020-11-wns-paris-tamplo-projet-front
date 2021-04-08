@@ -7,8 +7,8 @@ import Student from './Student'
 import { IStudent } from '../../types/data'
 
 const ALL_STUDENTS = gql`
-  query students {
-    students {
+  query users {
+    users {
       id
       firstname
       lastname
@@ -56,10 +56,10 @@ const StudentContainer = (): JSX.Element => {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const indexStudent = dataStudents.students.findIndex(
+    const indexStudent = dataStudents.users.findIndex(
       (student: IStudent) => student.id === e.target.value
     )
-    setSelectStudent({ ...dataStudents.students[indexStudent] })
+    setSelectStudent({ ...dataStudents.users[indexStudent] })
   }
 
   const closeModal = () => {
@@ -67,11 +67,11 @@ const StudentContainer = (): JSX.Element => {
   }
 
   return (
-    dataStudents.students && (
+    dataStudents.users && (
       <Student
         firstConnectionModal={firstConnectionModal}
         handleChange={handleChange}
-        students={dataStudents.students}
+        students={dataStudents.users}
         openModal={openModal}
         closeModal={closeModal}
         selectStudent={selectStudent}
