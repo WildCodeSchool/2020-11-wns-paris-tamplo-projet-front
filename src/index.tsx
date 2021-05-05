@@ -16,7 +16,7 @@ import App from './App'
 import './index.css'
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql/'
+  uri: 'https://tamplo.wns.wilders.dev/graphql/'
 })
 
 // Middleware to add authorization token to every gql call in headers
