@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    image: tamplo_client
+    ports:
+      - 3001:3001
+    volumes:
+      - ./src:/app/src
+    container_name: client-tamplo
