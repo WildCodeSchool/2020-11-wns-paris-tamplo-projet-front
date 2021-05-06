@@ -5,7 +5,7 @@ services:
     build: .
     image: tamplo_client
     environment:
-      - CLIENT_PORT = ${CLIENT_PORT}
+      - CLIENT_PORT=${CLIENT_PORT}
     ports:
       - 3001:3001
     volumes:
