@@ -3,7 +3,7 @@ version: '2'
 services:
   app:
     build: .
-    image: tamplo_client
+    image: tamplo_client_dev
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
     ports:
