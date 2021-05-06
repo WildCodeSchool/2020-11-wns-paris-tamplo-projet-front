@@ -27,4 +27,4 @@ COPY --from=stage /app/build ./build
 
 RUN npm install -g serve
 
-CMD serve -s build -l ${CLIENT_URI}
+CMD serve -s build -l ${CLIENT_PORT}
