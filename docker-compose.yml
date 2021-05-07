@@ -5,11 +5,11 @@ services:
     build:
       context: .
       dockerfile: ${DOCKERFILE_NAME}
+      args:
+        REACT_APP_SERVER_URL: ${REACT_APP_SERVER_URL}
     image: ${DOCKER_IMAGE_NAME}
     ports:
       - ${CLIENT_PORT}:3000
-    env_file:
-      - .env
     volumes:
       - ./src:/app/src
     container_name: ${DOCKER_CONTAINER_NAME}

@@ -2,6 +2,8 @@
 # this is the stage one , also know as the build step
 FROM node:14-alpine as stage
 
+ARG REACT_APP_SERVER_URL
+
 WORKDIR /app
 
 COPY package.json package.json
