@@ -36,7 +36,7 @@ restart:
 #------------------------------------------------------
 
 shell:
-	docker exec -it client-tamplo ash;
+	docker exec -it client-tamplo-dev ash;
 
 logs:
-	docker logs -f client-tamplo;
+	docker logs -f client-tamplo-dev;
