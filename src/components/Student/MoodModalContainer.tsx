@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation, gql } from '@apollo/client'
 import MoodModal from './MoodModal'
+import errorLogger from '../../utils/errorLogger'
 
 interface IProps {
   id: string
@@ -40,7 +41,16 @@ const MoodModalContainer = ({ id, name, closemodal }: IProps): JSX.Element => {
         }
       })
     } catch (e) {
-      console.error(e)
+      errorLogger(e, {
+        extraInfos: "Can't add mood",
+        state: {
+          id,
+          mood: {
+            note,
+            comment
+          }
+        }
+      })
     }
   }
 
