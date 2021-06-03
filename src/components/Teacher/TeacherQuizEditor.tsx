@@ -23,6 +23,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 
 // Type
 import { IQuestion, IQuiz, IResponse } from '../../types/quiz'
+import errorLogger from '../../utils/errorLogger'
 
 const ADD_QUIZ = gql`
   mutation createQuiz($quiz: inputQuiz) {
@@ -146,7 +147,17 @@ const TeacherQuizEditor = (): JSX.Element => {
         }
       })
     } catch (e) {
-      console.error(e)
+      errorLogger(e, {
+        extraInfos: 'Error on post quiz',
+        state: {
+          id: idQuiz,
+          quiz: {
+            title,
+            comment,
+            questions
+          }
+        }
+      })
     }
   }
 
@@ -163,7 +174,17 @@ const TeacherQuizEditor = (): JSX.Element => {
         }
       })
     } catch (e) {
-      console.error(e)
+      errorLogger(e, {
+        extraInfos: 'Error on edition quiz',
+        state: {
+          id: idQuiz,
+          quiz: {
+            title,
+            comment,
+            questions
+          }
+        }
+      })
     }
   }
 

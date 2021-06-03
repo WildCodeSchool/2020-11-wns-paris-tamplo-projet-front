@@ -1,8 +1,9 @@
 import React from 'react'
-import { useQuery, gql, useMutation } from '@apollo/client'
+import { useQuery, gql } from '@apollo/client'
 import { Link } from 'react-router-dom'
 
 import { IQuiz } from '../../types/quiz'
+import errorLogger from '../../utils/errorLogger'
 
 const ALL_QUIZZES = gql`
   query {
@@ -30,6 +31,7 @@ const StudentQuiz = (): JSX.Element => {
     return <p>Loading...</p>
   }
   if (error) {
+    errorLogger(error, { extraInfos: "Can't get quizzes", state: {} })
     return <p>Error...</p>
   }
 

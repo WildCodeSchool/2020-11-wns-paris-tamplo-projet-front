@@ -16,6 +16,7 @@ import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined'
 
 // Type
 import { IQuiz } from '../../types/quiz'
+import errorLogger from '../../utils/errorLogger'
 
 const ALL_QUIZZES = gql`
   query quizzes {
@@ -99,7 +100,10 @@ const TeacherQuiz = (): JSX.Element => {
         }
       })
     } catch (e) {
-      console.error(e)
+      errorLogger(e, {
+        extraInfos: 'Error on removeQuiz function',
+        state: idQuiz
+      })
     }
   }
 
@@ -107,6 +111,10 @@ const TeacherQuiz = (): JSX.Element => {
     return <p>Loading...</p>
   }
   if (errorQuizzes) {
+    errorLogger(errorQuizzes, {
+      extraInfos: "Can't get quizzes",
+      state: {}
+    })
     return <p>Error...</p>
   }
   const quizzesDataWritable = JSON.parse(JSON.stringify(dataQuizzes))

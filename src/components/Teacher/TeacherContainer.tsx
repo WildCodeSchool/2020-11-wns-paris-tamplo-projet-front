@@ -4,6 +4,7 @@ import { useQuery, gql } from '@apollo/client'
 import Teacher from './Teacher'
 
 import getUniqueDateFromStudents from '../../utils/getUniqueDateFromStudents'
+import errorLogger from '../../utils/errorLogger'
 
 const ALL_STUDENTS = gql`
   query users {
@@ -39,6 +40,10 @@ const TeacherContainer = (): JSX.Element => {
     return <p>Loading...</p>
   }
   if (errorStudents) {
+    errorLogger(errorStudents, {
+      extraInfos: "Can't get students list",
+      state: {}
+    })
     return <p>Error...</p>
   }
 
