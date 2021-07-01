@@ -5,9 +5,11 @@ import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
-  createHttpLink
+  createHttpLink,
+  from
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { onError } from '@apollo/client/link/error'
 import { BrowserRouter } from 'react-router-dom'
 import reportWebVitals from './reportWebVitals'
 
@@ -32,8 +34,33 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, extensions, locations, path }: any) => {
+      switch (extensions.code) {
+        // Apollo Server sets code to UNAUTHENTICATED when an AuthenticationError is thrown in a resolver
+        case 'UNAUTHENTICATED': {
+          localStorage.removeItem('token')
+          // eslint-disable-next-line no-restricted-globals
+          location.reload()
+          break
+        }
+        default:
+          console.error(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          )
+      }
+    })
+  }
+
+  if (networkError) {
+    console.error(' [Network error]:', networkError)
+  }
+})
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  // The `from` function combines an array of individual links into a link chain
+  link: from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache({ addTypename: false })
 })
 

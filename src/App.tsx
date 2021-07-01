@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Switch, Route } from 'react-router-dom'
 import clsx from 'clsx'
 
 // MUI Import
@@ -14,6 +15,8 @@ import { CssBaseline } from '@material-ui/core'
 import Header from './components/Header'
 import NavBar from './components/NavBar'
 import AppRouter from './components/Router/AppRouter'
+import SignIn from './components/Router/SignIn'
+import UserContext from './components/Context/UserContext'
 
 const drawerWidth = 240
 const theme = createMuiTheme({
@@ -69,18 +72,24 @@ const useStyles = makeStyles(() =>
   })
 )
 
-const user = {
-  firstname: 'Martin',
-  lastname: 'Lamy',
-  isStudent: false,
-  avatar:
-    'https://cdn.pixabay.com/photo/2016/11/18/19/07/happy-1836445_1280.jpg'
-}
-
 const App = (): JSX.Element => {
+  const initialeState = {
+    firstname: 'Martin',
+    lastname: 'Lamy',
+    isStudent: false,
+    avatar: ''
+  }
+
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem('user') || '{}') || initialeState
+  )
+
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user))
+  }, [user])
+
   const classes = useStyles()
   const [open, setOpen] = useState(false)
-  const [isStudent, setIsStudent] = useState(user.isStudent)
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -91,21 +100,30 @@ const App = (): JSX.Element => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <div className={classes.app}>
-        <CssBaseline />
-        <Header open={open} handleDrawerOpen={handleDrawerOpen} />
-        <NavBar open={open} handleDrawerClose={handleDrawerClose} user={user} />
-        <main
-          className={clsx(classes.content, {
-            [classes.contentShift]: open
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          <AppRouter isStudent={isStudent} />
-        </main>
-      </div>
-    </ThemeProvider>
+    <UserContext.Provider value={{ user, setUser }}>
+      <ThemeProvider theme={theme}>
+        <Switch>
+          <Route exact path="/signin" component={SignIn} />
+          <div className={classes.app}>
+            <CssBaseline />
+            <Header open={open} handleDrawerOpen={handleDrawerOpen} />
+            <NavBar
+              open={open}
+              handleDrawerClose={handleDrawerClose}
+              user={user}
+            />
+            <main
+              className={clsx(classes.content, {
+                [classes.contentShift]: open
+              })}
+            >
+              <div className={classes.drawerHeader} />
+              <AppRouter isStudent={user.isStudent} />
+            </main>
+          </div>
+        </Switch>
+      </ThemeProvider>
+    </UserContext.Provider>
   )
 }
 
