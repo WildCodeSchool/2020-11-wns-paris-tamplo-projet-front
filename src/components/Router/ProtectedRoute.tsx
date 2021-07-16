@@ -14,9 +14,7 @@ const ProtectedRoute = ({
     <Route
       {...rest}
       render={(props: any) => {
-        // Check Authentication here !!!
         const token = localStorage.getItem('token')
-
         return token ? (
           <Component {...props} />
         ) : (

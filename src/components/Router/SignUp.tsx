@@ -23,7 +23,7 @@ const SignUp = (): JSX.Element => {
     { firstname, lastname, email, password, status },
     setSignUpForm
   ] = useState(signUpFormInitValues)
-  const [signUp, mutationResults] = useSignUpMutation()
+  const [signUp] = useSignUpMutation()
   const [{ success, message }, setResponseStatus] = useState({
     success: null,
     message: ''

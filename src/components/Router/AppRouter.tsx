@@ -1,11 +1,9 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
 
 // Only logged users can access to the protected routes
 import ProtectedRoute from './ProtectedRoute'
 
 // Public Pages
-import SignIn from './SignIn'
 import SignUp from './SignUp'
 
 // Student components
@@ -26,8 +24,7 @@ import TeacherQuizzFollow from '../Teacher/TeacherQuizzFollow'
 import TeacherQuizEditor from '../Teacher/TeacherQuizEditor'
 
 const AppRouter = ({ isStudent }: { isStudent: boolean }): JSX.Element => (
-  <Switch>
-    <Route exact path="/signin" component={SignIn} />
+  <>
     <ProtectedRoute exact path="/signup" component={SignUp} />
     <ProtectedRoute
       exact
@@ -79,7 +76,7 @@ const AppRouter = ({ isStudent }: { isStudent: boolean }): JSX.Element => (
         />
       </>
     )}
-  </Switch>
+  </>
 )
 
 export default AppRouter

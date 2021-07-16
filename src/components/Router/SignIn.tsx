@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
 
 import useLoginMutation from '../../mutations/useLoginMutation'
+import UserContext from '../Context/UserContext'
 
 const SignIn = (): JSX.Element => {
   const loginFormInitValues = {
@@ -9,8 +10,9 @@ const SignIn = (): JSX.Element => {
     password: ''
   }
   const [{ email, password }, setLoginForm] = useState(loginFormInitValues)
-  const [login, mutationResults] = useLoginMutation()
+  const [login] = useLoginMutation()
   const [redirectToReferrer, setRedirectToReferrer] = useState(false)
+  const { setUser } = useContext(UserContext)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target
@@ -19,7 +21,13 @@ const SignIn = (): JSX.Element => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    login(email, password).then(() => {
+    login(email, password).then((res: any) => {
+      const userData = res.data.login.user
+      setUser((prevUser: any) => ({
+        ...prevUser,
+        ...userData,
+        isStudent: userData.status === 'STUDENT'
+      }))
       setRedirectToReferrer(true)
     })
   }

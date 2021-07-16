@@ -6,7 +6,10 @@ const LoginMutationGQL = gql`
       token
       user {
         id
+        firstname
+        lastname
         email
+        status
       }
     }
   }
